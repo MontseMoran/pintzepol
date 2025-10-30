@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/components/NavBar.scss';
+import '../styles/components/Navbar.scss';
 
 function NavBar() {
   return (
