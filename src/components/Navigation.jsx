@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/components/Navbar.scss';
 
-function Navbar() {
+function Navigation() {
   return (
     <nav>
       <a href="#inicio">Inicio</a>
@@ -12,4 +12,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default Navigation;
