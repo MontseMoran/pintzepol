@@ -1,0 +1,33 @@
+// CENTRADO FLEX
+@mixin flex-center($direction: row) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: $direction;
+}
+
+// MEDIA QUERY
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == tablet {
+    @media (min-width: $break-tablet) {
+      @content;
+    }
+  } @else if $breakpoint == desktop {
+    @media (min-width: $break-desktop) {
+      @content;
+    }
+  } @else if $breakpoint == large {
+    @media (min-width: $break-large) {
+      @content;
+    }
+  }
+}
+
+// SOMBRA ESTILIZADA
+@mixin shadow-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-strong;
+  }
+}
