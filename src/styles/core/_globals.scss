@@ -17,6 +17,12 @@ body {
   color: $color-text;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  min-width: 320px;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
 }
 
 img, video {

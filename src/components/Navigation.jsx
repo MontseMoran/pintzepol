@@ -1,13 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/components/Navbar.scss';
 
 function Navigation() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const links = [
+    { href: '#inicio', label: 'INTRO' },
+    { href: '#servicios', label: 'SERVICIOS' },
+    { href: '#servicios', label: 'SECTORES' },
+    { href: '#servicios', label: 'PROCESOS' },
+    { href: '#contacto', label: 'UBICACION' },
+  ];
+
+  const handleToggle = () => {
+    setIsOpen((current) => !current);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <nav>
-      <a href="#inicio">Inicio</a>
-      <a href="#servicios">Servicios</a>
-      <a href="#empresa">Empresa</a>
-      <a href="#contacto">Contacto</a>
+    <nav className={`floating-nav ${isOpen ? 'is-open' : ''}`} aria-label="Menu principal">
+      <button
+        type="button"
+        className="floating-nav__toggle"
+        onClick={handleToggle}
+        aria-expanded={isOpen}
+        aria-controls="floating-nav-panel"
+        aria-label={isOpen ? 'Cerrar menu' : 'Abrir menu'}
+      >
+        <span />
+        <span />
+        <span />
+      </button>
+
+      <div id="floating-nav-panel" className="floating-nav__panel">
+        {links.map((link) => (
+          <a key={link.label} href={link.href} onClick={handleClose}>
+            {link.label}
+          </a>
+        ))}
+      </div>
     </nav>
   );
 }
