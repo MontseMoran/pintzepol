@@ -23,6 +23,13 @@ body {
 #root {
   width: 100%;
   min-height: 100vh;
+  min-height: 100svh;
+}
+
+@supports (min-height: 100dvh) {
+  #root {
+    min-height: 100dvh;
+  }
 }
 
 img, video {
