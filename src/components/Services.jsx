@@ -35,9 +35,9 @@ export const services = [
     id: 'liquid',
     title: 'Pintura líquida',
     summary:
-      'Acabados versátiles para diferentes geometrías, colores, texturas y series de fabricación.',
+      'PINTURA LÍQUIDA DE ALTA PRECISIÓN',
     description:
-      'Trabajamos pintura líquida para piezas que requieren precisión estética y técnica, con adaptación a cada soporte y especificación.',
+      'Aplicación de pintura líquida en piezas metálicas, plásticas y vítreas para obtener acabados uniformes, resistentes y de alta calidad.',
     mediaClass: 'services-showcase__image--liquid',
   },
   {

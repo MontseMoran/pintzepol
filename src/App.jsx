@@ -93,6 +93,7 @@ function App() {
         images={showcaseImages}
         lockScroll={false}
         onClose={closeServiceDetail}
+        onCloseAll={closeServices}
       />
     </>
   );

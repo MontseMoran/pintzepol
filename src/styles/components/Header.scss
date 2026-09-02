@@ -20,8 +20,7 @@
     object-fit: cover;
     object-position: 22% 72%;
     z-index: 1;
-    filter: grayscale(1) contrast(1.03) brightness(0.88);
-    opacity: 0.74;
+    opacity: 1;
     transform: scale(1.08);
   }
 
@@ -84,9 +83,12 @@
     max-width: calc(100% - 32px);
     margin: 0 0 0 0.1rem;
     padding: 1.35rem 1rem 4rem;
-    background: #f1ece6;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(245, 242, 237, 0.86);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     color: #212121;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
   }
 
   h1 {
