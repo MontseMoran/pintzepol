@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import '../styles/components/Services.scss';
+import ServiceDetailOverlay from './ServiceDetailOverlay';
 
-const showcaseImages = [
+export const showcaseImages = [
   {
     id: 'pulido',
     src: 'image/pulido1.png',
@@ -20,32 +21,32 @@ const showcaseImages = [
   },
 ];
 
-const services = [
+export const services = [
   {
     id: 'powder',
     title: 'Pintura en polvo',
     summary:
-      'Recubrimiento electrostatico para piezas metalicas con alta resistencia, uniformidad y durabilidad.',
+      'Recubrimiento electrostático para piezas metálicas con alta resistencia, uniformidad y durabilidad.',
     description:
-      'Aplicamos pintura en polvo con control de proceso para conseguir un acabado tecnico, estable y preparado para produccion industrial continua.',
+      'Aplicamos pintura en polvo con control de proceso para conseguir un acabado técnico, estable y preparado para producción industrial continua.',
     mediaClass: 'services-showcase__image--powder',
   },
   {
     id: 'liquid',
-    title: 'Pintura liquida',
+    title: 'Pintura líquida',
     summary:
-      'Acabados versatiles para diferentes geometrias, colores, texturas y series de fabricacion.',
+      'Acabados versátiles para diferentes geometrías, colores, texturas y series de fabricación.',
     description:
-      'Trabajamos pintura liquida para piezas que requieren precision estetica y tecnica, con adaptacion a cada soporte y especificacion.',
+      'Trabajamos pintura líquida para piezas que requieren precisión estética y técnica, con adaptación a cada soporte y especificación.',
     mediaClass: 'services-showcase__image--liquid',
   },
   {
     id: 'technical',
-    title: 'Tratamientos tecnicos',
+    title: 'Tratamientos técnicos',
     summary:
-      'Preparacion, desengrase y procesos previos para mejorar adherencia, proteccion y rendimiento final.',
+      'Preparación, desengrase y procesos previos para mejorar adherencia, protección y rendimiento final.',
     description:
-      'Integramos tratamientos previos y operaciones tecnicas para asegurar una base solida antes del recubrimiento y elevar la calidad final.',
+      'Integramos tratamientos previos y operaciones técnicas para asegurar una base sólida antes del recubrimiento y elevar la calidad final.',
     mediaClass: 'services-showcase__image--technical',
   },
 ];
@@ -53,6 +54,7 @@ const services = [
 function Services() {
   const [activeId, setActiveId] = useState(services[0].id);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [selectedService, setSelectedService] = useState(null);
   const activeService = services.find((service) => service.id === activeId) ?? services[0];
   const activeImage = showcaseImages[activeImageIndex];
 
@@ -64,6 +66,14 @@ function Services() {
   const goToNext = () => {
     const nextIndex = activeImageIndex === showcaseImages.length - 1 ? 0 : activeImageIndex + 1;
     setActiveImageIndex(nextIndex);
+  };
+
+  const openServiceDetails = (service) => {
+    setSelectedService(service);
+  };
+
+  const closeServiceDetails = () => {
+    setSelectedService(null);
   };
 
   const sectionViewport = { once: true, amount: 0.35 };
@@ -120,7 +130,7 @@ function Services() {
               aria-label="Servicio anterior"
               onClick={goToPrevious}
             >
-              ‹
+              &lsaquo;
             </button>
             <button
               type="button"
@@ -128,7 +138,7 @@ function Services() {
               aria-label="Servicio siguiente"
               onClick={goToNext}
             >
-              ›
+              &rsaquo;
             </button>
           </div>
 
@@ -191,8 +201,15 @@ function Services() {
                   {isActive && (
                     <div className="services-showcase__mobile-panel">
                       <p>{service.summary}</p>
-                      <a href="#contacto" className="services-showcase__link">
-                        Ver mas
+                      <a
+                        href="#servicios"
+                        className="services-showcase__link"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          openServiceDetails(service);
+                        }}
+                      >
+                        Ver más
                       </a>
                     </div>
                   )}
@@ -208,13 +225,19 @@ function Services() {
             <div className={`services-showcase__image services-showcase__image--detail ${activeService.mediaClass}`}>
               <img
                 src="image/maquinas.png"
-                alt="Maquinaria y herramientas para tratamientos tecnicos"
+                alt="Maquinaria y herramientas para tratamientos técnicos"
                 className="services-showcase__photo"
               />
             </div>
           </motion.div>
         </motion.div>
       </div>
+
+      <ServiceDetailOverlay
+        service={selectedService}
+        images={showcaseImages}
+        onClose={closeServiceDetails}
+      />
     </motion.section>
   );
 }

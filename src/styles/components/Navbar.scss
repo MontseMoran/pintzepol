@@ -1,13 +1,13 @@
 .floating-nav {
   position: fixed;
-  top: 1.7rem;
-  left: 1.6rem;
+  top: 0.7rem;
+  left: 0.7rem;
   z-index: 20;
 
   &__toggle {
     position: relative;
-    width: 3rem;
-    height: 3rem;
+    width: 2rem;
+    height: 2rem;
     display: inline-flex;
     flex-direction: column;
     align-items: center;
@@ -22,7 +22,7 @@
       transform 180ms ease;
 
     span {
-      width: 1rem;
+      width: 0.76rem;
       height: 2px;
       border-radius: 999px;
       background: currentColor;
@@ -94,5 +94,24 @@
       visibility: visible;
       transform: translateY(0) scale(1);
     }
+  }
+
+  @media (min-width: 600px) {
+    top: 1.4rem;
+    left: 1.4rem;
+
+    &__toggle {
+      width: 3rem;
+      height: 3rem;
+
+      span {
+        width: 1rem;
+      }
+    }
+  }
+
+  @media (min-width: 900px) {
+    top: clamp(12px, 1.5vw, 18px);
+    left: clamp(18px, 1.8vw, 28px);
   }
 }

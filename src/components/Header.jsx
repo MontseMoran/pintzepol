@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/components/Header.scss';
 
-function Header() {
+function Header({ onOpenServices, onOpenContact }) {
   return (
     <header id="inicio" className="hero">
       <video
@@ -14,7 +14,7 @@ function Header() {
         aria-hidden="true"
       >
         <source src="image/video3.mp4" type="video/mp4" />
-        Tu navegador no soporta videos HTML5.
+        Tu navegador no soporta vídeos HTML5.
       </video>
 
       <div className="hero__overlay" />
@@ -28,16 +28,21 @@ function Header() {
           <div className="hero__panel">
             <h1>Recubrimientos industriales de alta calidad</h1>
             <p className="hero__copy">
-              Mas de 40 anos de experiencia aplicando pintura liquida y pintura en polvo
+              Más de 40 años de experiencia aplicando pintura líquida y pintura en polvo
               para obtener acabados resistentes, uniformes y duraderos.
             </p>
-            <a href="#contacto" className="hero__cta">
+            <button type="button" className="hero__cta" onClick={onOpenContact}>
               Solicita presupuesto
-            </a>
+            </button>
 
-            <a href="#servicios" className="hero__scroll" aria-label="Ir a servicios">
-              <span>↓</span>
-            </a>
+            <button
+              type="button"
+              className="hero__scroll"
+              onClick={onOpenServices}
+              aria-label="Abrir servicios"
+            >
+              <span>&darr;</span>
+            </button>
           </div>
         </div>
       </div>

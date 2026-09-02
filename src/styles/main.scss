@@ -1,9 +1,9 @@
-@import './core/vars';
-@import './core/mixins';
-@import './core/globals';
+@use './core/globals';
 
-@import './components/Header';
-@import './components/Navbar';
-@import './components/Services';
-@import './components/Contact';
-@import './components/Footer';
+@use './components/Header';
+@use './components/Navbar';
+@use './components/Services';
+@use './components/ServicesOverlay';
+@use './components/ServiceDetailOverlay';
+@use './components/Contact';
+@use './components/Footer';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/components/Navbar.scss';
 
-function Navigation() {
+function Navigation({ onOpenContact }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const links = [
@@ -9,7 +9,7 @@ function Navigation() {
     { href: '#servicios', label: 'SERVICIOS' },
     { href: '#servicios', label: 'SECTORES' },
     { href: '#servicios', label: 'PROCESOS' },
-    { href: '#contacto', label: 'UBICACION' },
+    { href: '#contacto', label: 'UBICACIÓN', action: onOpenContact },
   ];
 
   const handleToggle = () => {
@@ -21,14 +21,14 @@ function Navigation() {
   };
 
   return (
-    <nav className={`floating-nav ${isOpen ? 'is-open' : ''}`} aria-label="Menu principal">
+    <nav className={`floating-nav ${isOpen ? 'is-open' : ''}`} aria-label="Menú principal">
       <button
         type="button"
         className="floating-nav__toggle"
         onClick={handleToggle}
         aria-expanded={isOpen}
         aria-controls="floating-nav-panel"
-        aria-label={isOpen ? 'Cerrar menu' : 'Abrir menu'}
+        aria-label={isOpen ? 'Cerrar menú' : 'Abrir menú'}
       >
         <span />
         <span />
@@ -37,7 +37,18 @@ function Navigation() {
 
       <div id="floating-nav-panel" className="floating-nav__panel">
         {links.map((link) => (
-          <a key={link.label} href={link.href} onClick={handleClose}>
+          <a
+            key={link.label}
+            href={link.href}
+            onClick={(event) => {
+              if (link.action) {
+                event.preventDefault();
+                link.action();
+              }
+
+              handleClose();
+            }}
+          >
             {link.label}
           </a>
         ))}
