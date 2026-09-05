@@ -68,6 +68,23 @@
     height: auto;
   }
 
+  .paint-logo {
+    position: relative;
+    display: none;
+    aspect-ratio: 1078.27 / 192.949;
+    overflow: hidden;
+  }
+
+  .paint-logo__fallback,
+  .paint-logo__canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
   &__stage {
     position: relative;
     flex: 1;
@@ -82,13 +99,25 @@
     width: 100%;
     max-width: calc(100% - 32px);
     margin: 0 0 0 0.1rem;
-    padding: 1.35rem 1rem 4rem;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    background: rgba(245, 242, 237, 0.86);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    padding: 1.25rem 1rem 3.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(14px) saturate(115%);
+    -webkit-backdrop-filter: blur(14px) saturate(115%);
     color: #212121;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 1px 1px auto;
+      height: 42%;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0));
+      pointer-events: none;
+    }
   }
 
   h1 {
@@ -114,23 +143,30 @@
     justify-content: center;
     margin-top: 1.15rem;
     padding: 0.72rem 1rem;
-    border: 1px solid #111111;
+    border: 1px solid #2F3478;
     border-radius: 999px;
-    background: #111111;
-    color: $color-white;
+    background: #2F3478;
+    color: #FFFFFF;
     font-size: 0.66rem;
     font-weight: 700;
     letter-spacing: -0.01em;
     transition:
       transform 180ms ease,
       background-color 180ms ease,
+      border-color 180ms ease,
+      color 180ms ease,
       box-shadow 180ms ease;
 
     &:hover {
-      background: $color-white;
-      color: #111111;
-      transform: translateY(-2px);
-      box-shadow: 0 16px 28px rgba(0, 0, 0, 0.16);
+      border-color: #111111;
+      background: #111111;
+      color: #FFFFFF;
+      box-shadow: 0 14px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba(47, 52, 120, 0.42);
+      outline-offset: 3px;
     }
   }
 
@@ -148,6 +184,23 @@
     color: #1d1d1d;
     font-size: 0.82rem;
     line-height: 1;
+    transition:
+      background-color 180ms ease,
+      border-color 180ms ease,
+      color 180ms ease,
+      transform 180ms ease;
+
+    &:hover {
+      border-color: #2F3478;
+      background: rgba(47, 52, 120, 0.08);
+      color: #2F3478;
+      transform: translateY(2px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba(47, 52, 120, 0.42);
+      outline-offset: 3px;
+    }
   }
 
   @supports (height: 100dvh) {
@@ -179,7 +232,7 @@
 
     &__panel {
       max-width: calc(100% - 32px);
-      padding: 1.1rem 0.85rem 3.5rem;
+      padding: 1.1rem 0.85rem 3rem;
     }
 
     h1 {
@@ -226,7 +279,7 @@
       max-width: none;
       margin: 0;
       width: min(64vw, 31rem);
-      padding: 1.8rem 1.6rem 4.2rem;
+      padding: 1.7rem 1.5rem 3.5rem;
     }
 
     h1 {
@@ -264,36 +317,64 @@
   }
 
   @include respond-to(desktop) {
-    --hero-header-height: clamp(72px, 6vw, 84px);
+    --hero-header-height: 82px;
+
+    background: transparent;
 
     &__video {
+      position: fixed;
       object-position: 36% center;
+      z-index: 0;
+    }
+
+    &__overlay {
+      position: fixed;
+      z-index: 1;
     }
 
     &__brand {
+      position: fixed;
       top: 0;
       height: var(--hero-header-height);
       padding: 0 5rem;
       background: transparent;
       border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+      z-index: 12;
+      display: none;
     }
 
     &__logo {
-      width: clamp(150px, 12vw, 190px);
+      width: 250px;
+    }
+
+    &__logo--static {
+      display: none;
+    }
+
+    .paint-logo {
+      display: block;
+      transform: translateY(-5px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .paint-logo__canvas {
+        display: none;
+      }
     }
 
     &__stage {
-      align-items: flex-start;
+      display: grid;
+      place-items: center end;
       padding: 0;
     }
 
     &__panel {
-      position: absolute;
-      top: calc(3.5rem + 150px);
-      right: 1.8rem;
-      width: min(50vw, 40rem);
-      min-height: 31rem;
-      padding: 2.1rem 2rem 2rem 1.8rem;
+      position: relative;
+      width: clamp(560px, 34vw, 620px);
+      min-height: 0;
+      height: auto;
+      margin: 0 1.8rem 0 0;
+      padding: 2.35rem 2.5rem 4.4rem;
     }
 
     h1 {
@@ -304,21 +385,21 @@
 
     &__copy {
       max-width: 28rem;
-      margin-top: 2.75rem;
+      margin-top: 1.85rem;
       font-size: clamp(1rem, 1.3vw, 1.08rem);
       line-height: 1.18;
     }
 
     &__cta {
       min-width: 164px;
-      margin-top: 2.2rem;
-      margin-left: 8.4rem;
+      margin-top: 1.7rem;
+      margin-left: 0;
       font-size: 0.95rem;
     }
 
     &__scroll {
-      left: 1.55rem;
-      bottom: 1.25rem;
+      left: 2.5rem;
+      bottom: 1.35rem;
       width: 2.75rem;
       height: 2.75rem;
       font-size: 1.5rem;

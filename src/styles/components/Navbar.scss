@@ -114,4 +114,8 @@
     top: clamp(12px, 1.5vw, 18px);
     left: clamp(18px, 1.8vw, 28px);
   }
+
+  @media (min-width: 1024px) {
+    top: calc((82px - 3rem) / 2);
+  }
 }

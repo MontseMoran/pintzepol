@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import '../styles/components/Navbar.scss';
 
-function Navigation({ onOpenContact }) {
+function Navigation({ onOpenContact, onNavigate }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const links = [
-    { href: '#inicio', label: 'INTRO' },
-    { href: '#servicios', label: 'SERVICIOS' },
-    { href: '#servicios', label: 'SECTORES' },
-    { href: '#servicios', label: 'PROCESOS' },
+    { href: '#inicio', label: 'INTRO', panelId: 'inicio' },
+    { href: '#servicios', label: 'SERVICIOS', panelId: 'servicios' },
+    { href: '#servicios', label: 'SECTORES', panelId: 'servicios' },
+    { href: '#servicios', label: 'PROCESOS', panelId: 'servicios' },
     { href: '#contacto', label: 'UBICACIÓN', action: onOpenContact },
   ];
 
@@ -44,6 +44,9 @@ function Navigation({ onOpenContact }) {
               if (link.action) {
                 event.preventDefault();
                 link.action();
+              } else if (onNavigate && link.panelId) {
+                event.preventDefault();
+                onNavigate(link.panelId);
               }
 
               handleClose();

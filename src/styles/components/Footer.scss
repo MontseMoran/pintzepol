@@ -1,3 +1,5 @@
+@use '../core/vars' as *;
+
 .site-footer {
   display: flex;
   align-items: center;
@@ -26,10 +28,18 @@
 
   a {
     color: rgba(255, 255, 255, 0.82);
-    transition: color 160ms ease;
+    transition:
+      color 160ms ease,
+      outline-color 160ms ease;
 
     &:hover {
-      color: #fff;
+      color: #2F3478;
+    }
+
+    &:focus-visible {
+      color: #2F3478;
+      outline: 2px solid rgba(47, 52, 120, 0.48);
+      outline-offset: 3px;
     }
   }
 
@@ -44,5 +54,13 @@
     min-height: 48px;
     padding: 0 1.6rem;
     font-size: 0.75rem;
+  }
+
+  @media (min-width: 1024px) {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 15;
   }
 }
