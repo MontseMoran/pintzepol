@@ -157,6 +157,13 @@
     line-height: 1;
   }
 
+  &__item-copy {
+    margin: -0.35rem 0 0.85rem;
+    color: rgba(34, 34, 34, 0.78);
+    font-size: 0.88rem;
+    line-height: 1.4;
+  }
+
   &__detail-image {
     aspect-ratio: 2.2 / 1;
     margin-top: 1.7rem;
@@ -168,6 +175,72 @@
       height: 100%;
       object-fit: cover;
       object-position: center 74%;
+    }
+  }
+
+  &__panel--process {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(36, 43, 110, 0.92);
+    color: #FFFFFF;
+    box-shadow:
+      0 18px 45px rgba(0, 0, 0, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+
+  &__panel--process .services-overlay__close {
+    background: rgba(255, 255, 255, 0.12);
+    color: #FFFFFF;
+  }
+
+  &__layout--process {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+
+    h2 {
+      margin: 0;
+      color: #FFFFFF;
+      font-size: clamp(2.4rem, 10vw, 4.2rem);
+      font-weight: 400;
+      letter-spacing: -0.055em;
+      line-height: 0.95;
+      text-transform: uppercase;
+    }
+  }
+
+  &__process-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  &__process-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__process-item {
+    h3 {
+      margin: 0 0 0.3rem;
+      color: #FFFFFF;
+      font-size: 0.92rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      line-height: 1.15;
+      text-transform: uppercase;
+    }
+
+    p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 0.9rem;
+      line-height: 1.35;
     }
   }
 }
@@ -187,6 +260,23 @@
 
     &__service {
       padding: 1.2rem 0;
+    }
+
+    &__process-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 0;
+      align-items: stretch;
+    }
+
+    &__process-column {
+      gap: 1.4rem;
+      padding-right: 1.4rem;
+
+      &:last-child {
+        padding-right: 0;
+        padding-left: 1.4rem;
+        border-left: 1px solid rgba(255, 255, 255, 0.34);
+      }
     }
   }
 }
@@ -264,6 +354,41 @@
     &__detail-image {
       aspect-ratio: 4.35 / 1;
       margin-top: 0.9rem;
+    }
+
+    &__panel--process {
+      justify-content: center;
+      padding: clamp(2.4rem, 3.2vw, 3.6rem) clamp(2.6rem, 4vw, 4.6rem);
+    }
+
+    &__layout--process {
+      gap: 2rem;
+
+      h2 {
+        margin: 0;
+        font-size: clamp(42px, 3.6vw, 68px);
+      }
+    }
+
+    &__process-column {
+      justify-content: flex-start;
+      gap: clamp(1rem, 1.6vw, 1.45rem);
+      padding-right: clamp(2.2rem, 3.8vw, 3.8rem);
+
+      &:last-child {
+        padding-left: clamp(2.2rem, 3.8vw, 3.8rem);
+      }
+    }
+
+    &__process-item {
+      h3 {
+        font-size: clamp(16px, 1.25vw, 22px);
+      }
+
+      p {
+        max-width: 28ch;
+        font-size: clamp(14px, 1.05vw, 17px);
+      }
     }
   }
 }

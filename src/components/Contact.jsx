@@ -1,18 +1,62 @@
 import React from 'react';
+import { company } from '../content/company';
 import '../styles/components/Contact.scss';
 
-function Contact({ isOpen, inline = false, onClose }) {
+function LocationMap({ mapsConsent, onAcceptMaps }) {
+  if (mapsConsent) {
+    return (
+      <div className="contact-overlay__map">
+        <iframe
+          title="Mapa de situación de PINTZEPOL en Rubí"
+          src={company.mapsEmbedUrl}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="contact-overlay__map contact-overlay__map--blocked">
+      <p>
+        El mapa de Google Maps solo se muestra si acepta las cookies de este servicio.
+      </p>
+      <div className="contact-overlay__map-actions">
+        <button type="button" onClick={onAcceptMaps}>
+          Mostrar mapa
+        </button>
+        <a href={company.mapsExternalUrl} target="_blank" rel="noopener noreferrer">
+          Abrir en Google Maps
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function Contact({ isOpen, inline = false, onClose, mapsConsent = false, onAcceptMaps }) {
   if (!isOpen) {
     return null;
   }
 
+  const details = (
+    <>
+      <p><strong>Email:</strong> <a href={`mailto:${company.email}`}>{company.email}</a></p>
+      <p><strong>Teléfono:</strong> <a href={`tel:${company.phoneTel}`}>{company.phoneDisplay}</a></p>
+      <p><strong>Dirección:</strong> {company.address}</p>
+    </>
+  );
+
   if (inline) {
     return (
       <section id="contacto" className="contact-overlay__panel contact-overlay__panel--inline">
-        <h2 id="contact-overlay-title">CONTACTO</h2>
-        <p><strong>Email:</strong> info@pintzepol.com</p>
-        <p><strong>Teléfono:</strong> 936 99 01 20</p>
-        <p><strong>Dirección:</strong> Carrer Sardana, 7-9 · 08191 Rubí · Barcelona · España</p>
+        <div className="contact-overlay__intro">
+          <h2 id="contact-overlay-title">UBICACIÓN</h2>
+          <div className="contact-overlay__details">
+            {details}
+          </div>
+        </div>
+        <LocationMap mapsConsent={mapsConsent} onAcceptMaps={onAcceptMaps} />
       </section>
     );
   }
@@ -24,14 +68,13 @@ function Contact({ isOpen, inline = false, onClose }) {
           type="button"
           className="contact-overlay__close"
           onClick={onClose}
-          aria-label="Cerrar contacto"
+          aria-label="Cerrar ubicación"
         >
           ×
         </button>
-        <h2 id="contact-overlay-title">CONTACTO</h2>
-        <p><strong>Email:</strong> info@pintzepol.com</p>
-        <p><strong>Teléfono:</strong> 936 99 01 20</p>
-        <p><strong>Dirección:</strong> Carrer Sardana, 7-9 · 08191 Rubí · Barcelona · España</p>
+        <h2 id="contact-overlay-title">UBICACIÓN</h2>
+        {details}
+        <LocationMap mapsConsent={mapsConsent} onAcceptMaps={onAcceptMaps} />
       </section>
     </div>
   );

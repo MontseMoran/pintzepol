@@ -46,6 +46,76 @@
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
   }
+
+  &__map {
+    width: 100%;
+    min-height: 14rem;
+    margin-top: 1.2rem;
+    overflow: hidden;
+    background: rgba(34, 34, 34, 0.08);
+
+    iframe {
+      display: block;
+      width: 100%;
+      height: 14rem;
+      border: 0;
+    }
+
+    &--blocked {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.8rem;
+      padding: 1.1rem;
+      border: 1px solid rgba(34, 34, 34, 0.16);
+    }
+  }
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: rgba(11, 77, 140, 0.35);
+    text-underline-offset: 0.16em;
+    transition: text-decoration-color 160ms ease;
+
+    &:hover {
+      text-decoration-color: #0b4d8c;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba(11, 77, 140, 0.48);
+      outline-offset: 3px;
+    }
+  }
+
+  &__map-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+
+    button,
+    a {
+      min-height: 2.2rem;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    button {
+      background: #2F3478;
+      color: #ffffff;
+    }
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(34, 34, 34, 0.28);
+      color: #222222;
+      text-decoration: none;
+    }
+  }
 }
 
 @media (min-width: 1024px) {

@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../styles/components/Navbar.scss';
 
-function Navigation({ onOpenContact, onNavigate }) {
+function Navigation({ onOpenContact, onOpenServices, onOpenSectores, onOpenProcesos, onNavigate }) {
   const [isOpen, setIsOpen] = useState(false);
+  const navRef = useRef(null);
 
   const links = [
     { href: '#inicio', label: 'INTRO', panelId: 'inicio' },
-    { href: '#servicios', label: 'SERVICIOS', panelId: 'servicios' },
-    { href: '#servicios', label: 'SECTORES', panelId: 'servicios' },
-    { href: '#servicios', label: 'PROCESOS', panelId: 'servicios' },
+    { href: '#servicios', label: 'SERVICIOS', panelId: 'servicios', action: onNavigate ? undefined : onOpenServices },
+    { href: '#sectores', label: 'SECTORES', panelId: 'sectores', action: onNavigate ? undefined : onOpenSectores },
+    { href: '#procesos', label: 'PROCESOS', panelId: 'procesos', action: onNavigate ? undefined : onOpenProcesos },
     { href: '#contacto', label: 'UBICACIÓN', action: onOpenContact },
   ];
 
@@ -20,8 +21,26 @@ function Navigation({ onOpenContact, onNavigate }) {
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
+
+    const handlePointerDown = (event) => {
+      if (!navRef.current?.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown);
+
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+    };
+  }, [isOpen]);
+
   return (
-    <nav className={`floating-nav ${isOpen ? 'is-open' : ''}`} aria-label="Menú principal">
+    <nav ref={navRef} className={`floating-nav ${isOpen ? 'is-open' : ''}`} aria-label="Menú principal">
       <button
         type="button"
         className="floating-nav__toggle"

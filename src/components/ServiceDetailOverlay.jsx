@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import '../styles/components/ServiceDetailOverlay.scss';
 
-function ServiceDetailOverlay({ service, images, lockScroll = true, onClose, onCloseAll }) {
+function ServiceDetailOverlay({ service, images, lockScroll = true, onClose, onCloseAll, backLabel = '← SERVICIOS', copy }) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isCarouselPaused, setIsCarouselPaused] = useState(false);
   const [manualChangeCount, setManualChangeCount] = useState(0);
@@ -119,7 +119,7 @@ function ServiceDetailOverlay({ service, images, lockScroll = true, onClose, onC
   });
   const entranceInitial = prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 4 };
   const entranceAnimate = { opacity: 1, y: 0 };
-  const detailText = service?.id === 'powder'
+  const detailText = copy ?? (service?.id === 'powder'
     ? {
       title: 'PINTURA EN POLVO',
       technicalTitle: 'ACABADOS DE ALTA RESISTENCIA Y DURABILIDAD',
@@ -134,11 +134,11 @@ function ServiceDetailOverlay({ service, images, lockScroll = true, onClose, onC
         summary: 'SOLUCIONES DE ACABADO ADAPTADAS A DIFERENTES MATERIALES Y APLICACIONES.',
       }
       : {
-      title: service?.title.toUpperCase(),
-      technicalTitle: service?.summary,
-      description: service?.description,
+      title: service?.title?.toUpperCase(),
+      technicalTitle: 'SISTEMAS DE PROTECCIÓN',
+      description: 'Trabajamos con sistemas de pintado diseñados para cumplir con distintos niveles de protección anticorrosiva, incluyendo C3, C4, C4H, C5, C5H y C5M, adaptados a las condiciones ambientales y a los requisitos técnicos de cada aplicación.',
       summary: service?.summary,
-    };
+    });
 
   useEffect(() => {
     if (!isOpen || !lockScroll) {
@@ -275,9 +275,9 @@ function ServiceDetailOverlay({ service, images, lockScroll = true, onClose, onC
                 type="button"
                 className="service-detail-overlay__control"
                 onClick={onClose}
-                aria-label="Volver a servicios"
+                aria-label={backLabel.replace('← ', 'Volver a ')}
               >
-                ← SERVICIOS
+                {backLabel}
               </button>
               <button
                 type="button"
@@ -393,13 +393,10 @@ function ServiceDetailOverlay({ service, images, lockScroll = true, onClose, onC
                 >
                   {detailText.description}
                 </motion.p>
-                {service.id === 'powder' && (
-                  <div className={`service-detail-overlay__finish-samples${isFinishesVisible ? ' is-visible' : ''}`}>
-                    <div className="service-detail-overlay__finish-placeholder">
-                      FALTA IMAGEN DE MUESTRAS DE ACABADOS
-                    </div>
-                    <p>AMPLIA VARIEDAD DE ACABADOS</p>
-                  </div>
+                {service?.id === 'powder' && (
+                  <p className={`service-detail-overlay__finish-note${isFinishesVisible ? ' is-visible' : ''}`}>
+                    Amplia variedad de acabados
+                  </p>
                 )}
               </aside>
               </div>

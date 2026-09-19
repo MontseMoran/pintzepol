@@ -1,30 +1,40 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
+import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import Header from './components/Header';
 import PaintLogo from './components/PaintLogo';
 import Navigation from './components/Navigation';
 import { services, showcaseImages } from './components/Services';
+import { processSteps, readCookieConsent, saveCookieConsent, sectors } from './content/company';
 import ServicesOverlay from './components/ServicesOverlay';
 import ServiceDetailOverlay from './components/ServiceDetailOverlay';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import HorizontalHome from './components/HorizontalHome';
+import HorizontalHome, { sectorDetailCopy } from './components/HorizontalHome';
+import LegalOverlay from './components/LegalOverlay';
+import CookieBanner from './components/CookieBanner';
+import JourneyOverlay from './components/JourneyOverlay';
 
 function App() {
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
   const [isDesktopHorizontal, setIsDesktopHorizontal] = useState(false);
+  const [activePanelIndex, setActivePanelIndex] = useState(0);
+  const [isSectoresOpen, setIsSectoresOpen] = useState(false);
+  const [isProcesosOpen, setIsProcesosOpen] = useState(false);
+  const [selectedSector, setSelectedSector] = useState(null);
+  const [legalDocumentId, setLegalDocumentId] = useState(null);
+  const [cookieConsent, setCookieConsent] = useState(null);
   const horizontalStoryRef = useRef(null);
   const heroVideoRef = useRef(null);
   const scrollPositionRef = useRef(0);
-  const panelIds = ['inicio', 'servicios', 'powder', 'liquid', 'technical', 'contacto'];
+  const panelIds = ['inicio', 'servicios', 'powder', 'liquid', 'technical', 'sectores', 'transporte', 'industria', 'salud', 'tecnologia', 'procesos', 'contacto'];
+  const panelLabels = ['INICIO', 'SERVICIOS', 'PINTURA EN POLVO', 'PINTURA LÍQUIDA', 'TRATAMIENTOS', 'SECTORES', 'TRANSPORTE', 'INDUSTRIA', 'SALUD', 'TECNOLOGÍA', 'PROCESOS', 'UBICACIÓN'];
   const panelCount = panelIds.length;
   const { scrollYProgress } = useScroll({
     target: horizontalStoryRef,
     offset: ['start start', 'end end'],
   });
-  const trackX = useTransform(scrollYProgress, [0, 1], ['0vw', `-${(panelCount - 1) * 100}vw`]);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
@@ -41,7 +51,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!isServicesOpen && !isContactOpen) {
+    if (!isServicesOpen && !isContactOpen && !isSectoresOpen && !isProcesosOpen && !legalDocumentId && !selectedSector) {
       return undefined;
     }
 
@@ -72,7 +82,16 @@ function App() {
       body.style.overflow = originalBodyStyles.overflow;
       window.scrollTo(0, scrollPositionRef.current);
     };
-  }, [isServicesOpen, isContactOpen]);
+  }, [isServicesOpen, isContactOpen, isSectoresOpen, isProcesosOpen, legalDocumentId, selectedSector]);
+
+  useEffect(() => {
+    setCookieConsent(readCookieConsent());
+  }, []);
+
+  const updateCookieConsent = (value) => {
+    saveCookieConsent(value);
+    setCookieConsent(value);
+  };
 
   const openServices = () => {
     if (isDesktopHorizontal) {
@@ -81,6 +100,24 @@ function App() {
     }
 
     setIsServicesOpen(true);
+  };
+
+  const openSectores = () => {
+    if (isDesktopHorizontal) {
+      scrollToPanel('sectores');
+      return;
+    }
+
+    setIsSectoresOpen(true);
+  };
+
+  const openProcesos = () => {
+    if (isDesktopHorizontal) {
+      scrollToPanel('procesos');
+      return;
+    }
+
+    setIsProcesosOpen(true);
   };
 
   const openContact = () => {
@@ -107,6 +144,27 @@ function App() {
 
   const closeServiceDetail = () => {
     setSelectedService(null);
+  };
+
+  const closeSectores = () => {
+    setSelectedSector(null);
+    setIsSectoresOpen(false);
+  };
+
+  const openSectorDetail = (item) => {
+    setSelectedSector(item);
+  };
+
+  const closeSectorDetail = () => {
+    setSelectedSector(null);
+  };
+
+  const closeLegal = () => {
+    setLegalDocumentId(null);
+  };
+
+  const openLegal = (documentId) => {
+    setLegalDocumentId(documentId);
   };
 
   const scrollToPanel = (panelId, behaviorOverride) => {
@@ -139,12 +197,16 @@ function App() {
       return;
     }
 
-    if (event.key === 'ArrowRight') {
+    if (legalDocumentId || isContactOpen || isServicesOpen || isSectoresOpen || isProcesosOpen || selectedSector) {
+      return;
+    }
+
+    if (event.key === 'ArrowDown' || event.key === 'ArrowRight' || event.key === 'PageDown') {
       event.preventDefault();
       scrollToRelativePanel(1);
     }
 
-    if (event.key === 'ArrowLeft') {
+    if (event.key === 'ArrowUp' || event.key === 'ArrowLeft' || event.key === 'PageUp') {
       event.preventDefault();
       scrollToRelativePanel(-1);
     }
@@ -160,7 +222,7 @@ function App() {
     return () => {
       window.removeEventListener('keydown', handleHorizontalKeyDown);
     };
-  }, [isDesktopHorizontal]);
+  }, [isDesktopHorizontal, isContactOpen, isServicesOpen, isSectoresOpen, isProcesosOpen, legalDocumentId, selectedSector]);
 
   useMotionValueEvent(scrollYProgress, 'change', (latestProgress) => {
     const video = heroVideoRef.current;
@@ -168,6 +230,15 @@ function App() {
     if (!isDesktopHorizontal) {
       return;
     }
+
+    const nextPanelIndex = Math.min(
+      Math.max(Math.round(latestProgress * (panelCount - 1)), 0),
+      panelCount - 1,
+    );
+
+    setActivePanelIndex((currentPanelIndex) => (
+      currentPanelIndex === nextPanelIndex ? currentPanelIndex : nextPanelIndex
+    ));
 
     if (!video) {
       return;
@@ -201,13 +272,25 @@ function App() {
             <PaintLogo videoRef={heroVideoRef} />
           </div>
         )}
+        {isDesktopHorizontal && (
+          <aside className="horizontal-progress" aria-label="Progreso del recorrido">
+            <p className="horizontal-progress__count">
+              <span>{String(activePanelIndex + 1).padStart(2, '0')}</span>
+              <span className="horizontal-progress__total"> / {String(panelCount).padStart(2, '0')}</span>
+            </p>
+            <p className="horizontal-progress__label">{panelLabels[activePanelIndex]}</p>
+            <div className="horizontal-progress__bar" aria-hidden="true">
+              <motion.span className="horizontal-progress__value" style={{ scaleX: scrollYProgress }} />
+            </div>
+          </aside>
+        )}
         <main
           ref={horizontalStoryRef}
           className="horizontal-story"
           style={{ '--horizontal-panel-count': panelCount }}
         >
           <div className="horizontal-page">
-            <motion.div className="horizontal-track" style={{ x: trackX }}>
+            <div className="horizontal-track">
               <section className="horizontal-panel horizontal-panel--hero" data-panel-id="inicio">
                 <Header
                   videoRef={heroVideoRef}
@@ -216,17 +299,56 @@ function App() {
                   onOpenContact={openContact}
                 />
               </section>
-              <HorizontalHome onSelectService={scrollToPanel} />
-            </motion.div>
+              <HorizontalHome
+                onSelectService={scrollToPanel}
+                mapsConsent={cookieConsent === 'maps'}
+                onAcceptMaps={() => updateCookieConsent('maps')}
+              />
+            </div>
           </div>
         </main>
-        <Footer />
+        <Footer onOpenLegal={openLegal} />
       </div>
       <Navigation
         onOpenContact={openContact}
+        onOpenServices={openServices}
+        onOpenSectores={openSectores}
+        onOpenProcesos={openProcesos}
         onNavigate={isDesktopHorizontal ? scrollToPanel : undefined}
       />
-      <Contact isOpen={isContactOpen} onClose={closeContact} />
+      <Contact
+        isOpen={isContactOpen}
+        onClose={closeContact}
+        mapsConsent={cookieConsent === 'maps'}
+        onAcceptMaps={() => updateCookieConsent('maps')}
+      />
+      <LegalOverlay
+        documentId={legalDocumentId}
+        onClose={closeLegal}
+        onSelectDocument={openLegal}
+      />
+      <CookieBanner
+        isVisible={!cookieConsent}
+        onOpenCookies={() => openLegal('cookies')}
+        onAcceptNecessary={() => updateCookieConsent('necessary')}
+        onAcceptMaps={() => updateCookieConsent('maps')}
+      />
+      <JourneyOverlay
+        isOpen={isSectoresOpen}
+        title="SECTORES"
+        items={sectors}
+        images={showcaseImages}
+        onClose={closeSectores}
+        onSelectItem={openSectorDetail}
+      />
+      <JourneyOverlay
+        isOpen={isProcesosOpen}
+        title="PROCESOS"
+        items={processSteps}
+        images={showcaseImages}
+        layout="process"
+        onClose={() => setIsProcesosOpen(false)}
+      />
       <ServicesOverlay
         isOpen={isServicesOpen}
         isDetailOpen={Boolean(selectedService)}
@@ -241,6 +363,15 @@ function App() {
         lockScroll={false}
         onClose={closeServiceDetail}
         onCloseAll={closeServices}
+      />
+      <ServiceDetailOverlay
+        service={selectedSector}
+        images={showcaseImages}
+        lockScroll={false}
+        backLabel="← SECTORES"
+        copy={selectedSector ? sectorDetailCopy[selectedSector.id] : null}
+        onClose={closeSectorDetail}
+        onCloseAll={closeSectores}
       />
     </>
   );
