@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import '../styles/components/ServicesOverlay.scss';
+import FadeCarouselImage from './FadeCarouselImage';
 
 function ServicesOverlay({ isOpen, isDetailOpen, services, images, onClose, onSelectService }) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -8,6 +9,12 @@ function ServicesOverlay({ isOpen, isDetailOpen, services, images, onClose, onSe
   const [manualChangeCount, setManualChangeCount] = useState(0);
   const closeButtonRef = useRef(null);
   const activeImage = images[activeImageIndex] ?? images[0];
+
+  useEffect(() => {
+    if (images.length > 0 && activeImageIndex >= images.length) {
+      setActiveImageIndex(0);
+    }
+  }, [activeImageIndex, images.length]);
 
   useEffect(() => {
     if (!isOpen || isDetailOpen) {
@@ -51,6 +58,10 @@ function ServicesOverlay({ isOpen, isDetailOpen, services, images, onClose, onSe
   }, [images.length, isCarouselPaused, isDetailOpen, isOpen, manualChangeCount]);
 
   const showPreviousImage = () => {
+    if (images.length <= 1) {
+      return;
+    }
+
     setActiveImageIndex((currentIndex) => (
       currentIndex === 0 ? images.length - 1 : currentIndex - 1
     ));
@@ -58,6 +69,10 @@ function ServicesOverlay({ isOpen, isDetailOpen, services, images, onClose, onSe
   };
 
   const showNextImage = () => {
+    if (images.length <= 1) {
+      return;
+    }
+
     setActiveImageIndex((currentIndex) => (
       currentIndex === images.length - 1 ? 0 : currentIndex + 1
     ));
@@ -66,7 +81,7 @@ function ServicesOverlay({ isOpen, isDetailOpen, services, images, onClose, onSe
 
   return (
     <AnimatePresence>
-      {isOpen && (
+      {isOpen && !isDetailOpen && (
         <motion.div
           className="services-overlay"
           role="dialog"
@@ -101,7 +116,7 @@ function ServicesOverlay({ isOpen, isDetailOpen, services, images, onClose, onSe
                   onMouseEnter={() => setIsCarouselPaused(true)}
                   onMouseLeave={() => setIsCarouselPaused(false)}
                 >
-                  <img src={activeImage.src} alt={activeImage.alt} />
+                  <FadeCarouselImage image={activeImage} />
 
                   {images.length > 1 && (
                     <>

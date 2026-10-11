@@ -3,6 +3,8 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { services, showcaseImages } from './Services';
 import { processSteps, sectors } from '../content/company';
 import Contact from './Contact';
+import { ServiceFinishesPanel } from './FinishesModal';
+import FadeCarouselImage from './FadeCarouselImage';
 import '../styles/components/HorizontalHome.scss';
 
 const cardViewport = { once: true, amount: 0.32 };
@@ -42,26 +44,6 @@ function useCardReveal() {
   };
 }
 
-function getCoverflowItems(images, activeImageIndex) {
-  const activeImage = images[activeImageIndex] ?? images[0];
-
-  if (!activeImage) {
-    return [];
-  }
-
-  if (images.length <= 1) {
-    return [{ image: activeImage, position: 'active' }];
-  }
-
-  const getCircularImage = (index) => images[(index + images.length) % images.length];
-
-  return [
-    { image: getCircularImage(activeImageIndex - 1), position: 'previous' },
-    { image: activeImage, position: 'active' },
-    { image: getCircularImage(activeImageIndex + 1), position: 'next' },
-  ];
-}
-
 function CoverflowFrame({
   images,
   activeImageIndex,
@@ -70,22 +52,15 @@ function CoverflowFrame({
   onPause,
   onResume,
 }) {
-  const coverflowItems = getCoverflowItems(images, activeImageIndex);
+  const activeImage = images[activeImageIndex] ?? images[0];
 
   return (
     <div
-      className="horizontal-detail__image-frame horizontal-detail__image-frame--coverflow"
+      className="horizontal-detail__image-frame"
       onMouseEnter={onPause}
       onMouseLeave={onResume}
     >
-      {coverflowItems.map(({ image, position }) => (
-        <div
-          key={`${image.id}-${position}`}
-          className={`horizontal-detail__coverflow-item horizontal-detail__coverflow-item--${position}`}
-        >
-          <img src={image.src} alt={image.alt} />
-        </div>
-      ))}
+      <FadeCarouselImage image={activeImage} />
       {images.length > 1 && (
         <>
           <button type="button" className="horizontal-detail__image-nav horizontal-detail__image-nav--previous" onClick={onPrevious} aria-label="Imagen anterior">
@@ -106,6 +81,12 @@ function useImageCarousel(length) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [manualChangeCount, setManualChangeCount] = useState(0);
+
+  useEffect(() => {
+    if (length > 0 && activeImageIndex >= length) {
+      setActiveImageIndex(0);
+    }
+  }, [activeImageIndex, length]);
 
   useEffect(() => {
     if (length <= 1 || isPaused) {
@@ -130,6 +111,10 @@ function useImageCarousel(length) {
   }, [isPaused, length, manualChangeCount]);
 
   const showPreviousImage = () => {
+    if (length <= 1) {
+      return;
+    }
+
     setActiveImageIndex((currentIndex) => (
       currentIndex === 0 ? length - 1 : currentIndex - 1
     ));
@@ -137,6 +122,10 @@ function useImageCarousel(length) {
   };
 
   const showNextImage = () => {
+    if (length <= 1) {
+      return;
+    }
+
     setActiveImageIndex((currentIndex) => (
       currentIndex === length - 1 ? 0 : currentIndex + 1
     ));
@@ -155,21 +144,21 @@ function useImageCarousel(length) {
 const detailCopy = {
   powder: {
     title: 'PINTURA EN POLVO',
-    technicalTitle: 'ACABADOS DE ALTA RESISTENCIA Y DURABILIDAD',
-    description: 'Recubrimientos resistentes y duraderos que protegen y mejoran piezas industriales, garantizando uniformidad, calidad y fiabilidad a largo plazo.',
-    summary: 'SOLUCIONES DE PINTADO Y TRATAMIENTO DE SUPERFICIES ADAPTADAS A LAS EXIGENCIAS DE CADA SECTOR INDUSTRIAL',
+    technicalTitle: 'RESISTENCIA Y CALIDAD EN CADA ACABADO',
+    description: 'Recubrimientos en polvo que aportan protección, durabilidad y un acabado uniforme a todo tipo de piezas y componentes. Adaptamos cada proceso a las características de la pieza y a las exigencias de su aplicación.',
+    summary: 'SOLUCIONES DE PINTURA Y RECUBRIMIENTO ADAPTADAS A LAS NECESIDADES DE CADA CLIENTE Y SECTOR INDUSTRIAL',
   },
   liquid: {
     title: 'PINTURA LÍQUIDA',
-    technicalTitle: 'PINTURA LÍQUIDA DE ALTA PRECISIÓN',
-    description: 'Aplicación de pintura líquida en piezas metálicas, plásticas y vítreas para obtener acabados uniformes, resistentes y de alta calidad.',
-    summary: 'SOLUCIONES DE ACABADO ADAPTADAS A DIFERENTES MATERIALES Y APLICACIONES.',
+    technicalTitle: 'TRABAJOS DE PRECISIÓN PARA CADA PROYECTO',
+    description: 'Trabajamos con diferentes sistemas de aplicación para conseguir el resultado estético y técnico que requiere cada componente, desde colores y texturas hasta efectos y acabados especiales.',
+    summary: 'EXPERTOS EN APLICACIONES SOBRE SUPERFICIES METÁLICAS, PLÁSTICAS Y OTROS MATERIALES',
   },
   technical: {
     title: 'TRATAMIENTOS TÉCNICOS',
-    technicalTitle: 'SISTEMAS DE PROTECCIÓN',
-    description: 'Trabajamos con sistemas de pintado diseñados para cumplir con distintos niveles de protección anticorrosiva, incluyendo C3, C4, C4H, C5, C5H y C5M, adaptados a las condiciones ambientales y a los requisitos técnicos de cada aplicación.',
-    summary: 'Aplicación de sistemas técnicos adaptados a requisitos específicos de resistencia, protección y normativa.',
+    technicalTitle: 'SOLUCIONES ESPECÍFICAS PARA TODO TIPO DE ENTORNO',
+    description: 'Desarrollamos sistemas orientados a mejorar el comportamiento de los componentes frente a condiciones ambientales, corrosión y agentes externos, siguiendo los requisitos establecidos para cada proyecto.',
+    summary: 'SISTEMAS C3, C4, C4H, C5, C5H Y C5M SEGÚN LAS CONDICIONES DE EXPOSICIÓN Y LAS EXIGENCIAS DEL PROYECTO.',
   },
 };
 
@@ -180,23 +169,38 @@ const serviceImages = {
     { id: 'polvo-3', src: `${import.meta.env.BASE_URL}image/polvo/Polvo3.webp`, alt: 'Proceso de acabado en pintura en polvo' },
   ],
   liquid: [
-    { id: 'liquido-1', src: `${import.meta.env.BASE_URL}image/liquido/Liquido1.webp`, alt: 'Aplicación industrial de pintura líquida' },
-    { id: 'liquido-2', src: `${import.meta.env.BASE_URL}image/liquido/liquidocadena.webp`, alt: 'Línea de pintura líquida en proceso continuo' },
-    { id: 'liquido-3', src: `${import.meta.env.BASE_URL}image/liquido/liquido2.webp`, alt: 'Acabado de pintura líquida sobre pieza industrial' },
+    { id: 'liquido-1', src: `${import.meta.env.BASE_URL}image/liquido/CARRUSEL_PINTURA _LÍQUIDA.webp`, alt: 'Aplicación industrial de pintura líquida' },
+    { id: 'liquido-2', src: `${import.meta.env.BASE_URL}image/liquido/CARRUSEL_PINTURA_LÍQUIDA_CADENA.webp`, alt: 'Línea de pintura líquida en proceso continuo' },
+    { id: 'liquido-3', src: `${import.meta.env.BASE_URL}image/liquido/CARRUSEL _PINTURA_LÍQUIDA_VIDRIO.webp`, alt: 'Acabado de pintura líquida sobre pieza industrial' },
   ],
   technical: [
-    { id: 'tecnico-1', src: `${import.meta.env.BASE_URL}image/pulido1.png`, alt: 'Proceso técnico de preparación de superficies' },
-    { id: 'tecnico-2', src: `${import.meta.env.BASE_URL}image/maquinas.png`, alt: 'Maquinaria para tratamientos técnicos' },
-    { id: 'tecnico-3', src: `${import.meta.env.BASE_URL}image/empaquetado.png`, alt: 'Zona de operaciones técnicas y acabado de piezas' },
+    { id: 'tecnico-1', src: `${import.meta.env.BASE_URL}image/TRAT/TRATAMIENTOS_TECNICOS_MICRAJE.webp`, alt: 'Control de micraje en tratamientos técnicos' },
+    { id: 'tecnico-2', src: `${import.meta.env.BASE_URL}image/TRAT/TRATAMIENTOS_TECNICOS_PULIDORA.webp`, alt: 'Pulidora para tratamientos técnicos' },
+    { id: 'tecnico-3', src: `${import.meta.env.BASE_URL}image/TRAT/TRATAMIENTOS_TÉCNICOS_ANTICORROSIVO.webp`, alt: 'Tratamiento anticorrosivo técnico' },
+  ],
+};
+
+const sectorImages = [
+  { id: 'sectores-1', src: `${import.meta.env.BASE_URL}image/SECTORES/CARRUSEL_SECTORES_PINTAR.webp`, alt: 'Pintado de piezas para sectores industriales' },
+  { id: 'sectores-2', src: `${import.meta.env.BASE_URL}image/SECTORES/CARRUSEL_SECTORES_VASO.webp`, alt: 'Pieza con acabado técnico para sectores especializados' },
+  { id: 'sectores-3', src: `${import.meta.env.BASE_URL}image/SECTORES/CARRUSEL_SECTORES.webp`, alt: 'Aplicación de pintura para distintos sectores' },
+];
+
+const sectorImagesById = {
+  transporte: [
+    { id: 'transporte-1', src: `${import.meta.env.BASE_URL}image/SECTORES/TRANSPORTE/TRANSPORTE_FERROVIARIO.webp`, alt: 'Pieza para transporte ferroviario' },
+    { id: 'transporte-2', src: `${import.meta.env.BASE_URL}image/SECTORES/TRANSPORTE/TRANSPORTE_NAVAL.webp`, alt: 'Pieza para transporte naval' },
+    { id: 'transporte-3', src: `${import.meta.env.BASE_URL}image/SECTORES/TRANSPORTE/TRANSPORTE_AUTOMOCIÓN.webp`, alt: 'Pieza para automoción' },
   ],
 };
 
 export const sectorDetailCopy = {
   transporte: {
     title: 'TRANSPORTE',
-    technicalTitle: 'ACABADOS DE ALTA RESISTENCIA Y DURABILIDAD',
-    description: 'Recubrimientos resistentes y duraderos que protegen y mejoran piezas industriales, garantizando uniformidad, calidad y fiabilidad a largo plazo.',
-    summary: 'SOLUCIONES DE PINTADO Y TRATAMIENTO DE SUPERFICIES ADAPTADAS A LAS EXIGENCIAS DE CADA SECTOR INDUSTRIAL',
+    technicalTitle: 'SOLUCIONES PARA UNA MOVILIDAD MÁS EXIGENTE',
+    description: 'Participamos en proyectos de automoción, ferrocarril, naval y otras áreas vinculadas a la movilidad, atendiendo las particularidades de cada pieza y aplicación.',
+    secondaryDescription: 'DESDE PEQUEÑOS ELEMENTOS HASTA ESTRUCTURAS DE GRAN FORMATO, TRABAJAMOS PARA DISTINTAS ÁREAS DE LA INDUSTRIA DE LA MOVILIDAD.',
+    summary: 'APLICACIONES DIVERSAS, DESDE COMPONENTES HASTA ESTRUCTURAS.',
   },
   industria: {
     title: 'INDUSTRIA',
@@ -227,7 +231,6 @@ function ServicesIndexPanel({ onSelectService }) {
     showPreviousImage,
     showNextImage,
   } = useImageCarousel(showcaseImages.length);
-  const activeImage = showcaseImages[activeImageIndex] ?? showcaseImages[0];
 
   return (
     <motion.div
@@ -238,19 +241,14 @@ function ServicesIndexPanel({ onSelectService }) {
       variants={reveal.card}
     >
       <section className="horizontal-services__visual">
-        <div
-          className="horizontal-services__main-image"
-          onMouseEnter={pauseCarousel}
-          onMouseLeave={resumeCarousel}
-        >
-          <img src={activeImage.src} alt={activeImage.alt} />
-          <button type="button" className="horizontal-services__image-nav horizontal-services__image-nav--previous" onClick={showPreviousImage} aria-label="Imagen anterior">
-            &lsaquo;
-          </button>
-          <button type="button" className="horizontal-services__image-nav horizontal-services__image-nav--next" onClick={showNextImage} aria-label="Imagen siguiente">
-            &rsaquo;
-          </button>
-        </div>
+        <CoverflowFrame
+          images={showcaseImages}
+          activeImageIndex={activeImageIndex}
+          onPrevious={showPreviousImage}
+          onNext={showNextImage}
+          onPause={pauseCarousel}
+          onResume={resumeCarousel}
+        />
         <div className="horizontal-services__dots" aria-hidden="true">
           {showcaseImages.map((image, index) => (
             <span key={image.id} className={`horizontal-services__dot${index === activeImageIndex ? ' is-active' : ''}`} />
@@ -283,6 +281,7 @@ function ServicesIndexPanel({ onSelectService }) {
 
 function ServicePanel({ service, onBackToServices }) {
   const reveal = useCardReveal();
+  const [activeFinishesId, setActiveFinishesId] = useState(null);
   const copy = detailCopy[service.id] ?? {
     title: service.title.toUpperCase(),
     technicalTitle: service.summary,
@@ -297,7 +296,6 @@ function ServicePanel({ service, onBackToServices }) {
     showPreviousImage,
     showNextImage,
   } = useImageCarousel(images.length);
-  const activeImage = images[activeImageIndex] ?? images[0];
 
   return (
     <motion.div
@@ -318,23 +316,14 @@ function ServicePanel({ service, onBackToServices }) {
         </button>
         <h2>{copy.title}</h2>
         <div className="horizontal-detail__rule" />
-        <div
-          className="horizontal-detail__image-frame"
-          onMouseEnter={pauseCarousel}
-          onMouseLeave={resumeCarousel}
-        >
-          <img src={activeImage.src} alt={activeImage.alt} />
-          {images.length > 1 && (
-            <>
-              <button type="button" className="horizontal-detail__image-nav horizontal-detail__image-nav--previous" onClick={showPreviousImage} aria-label="Imagen anterior">
-                &lsaquo;
-              </button>
-              <button type="button" className="horizontal-detail__image-nav horizontal-detail__image-nav--next" onClick={showNextImage} aria-label="Imagen siguiente">
-                &rsaquo;
-              </button>
-            </>
-          )}
-        </div>
+        <CoverflowFrame
+          images={images}
+          activeImageIndex={activeImageIndex}
+          onPrevious={showPreviousImage}
+          onNext={showNextImage}
+          onPause={pauseCarousel}
+          onResume={resumeCarousel}
+        />
         <div className="horizontal-detail__dots" aria-hidden="true">
           {images.map((image, index) => (
             <span key={image.id} className={`horizontal-detail__dot${index === activeImageIndex ? ' is-active' : ''}`} />
@@ -344,10 +333,25 @@ function ServicePanel({ service, onBackToServices }) {
       </section>
 
       <aside className="horizontal-detail__content">
-        <h3>{copy.technicalTitle}</h3>
-        <p className="horizontal-detail__description">{copy.description}</p>
-        {service.id === 'powder' && (
-          <p className="horizontal-detail__finish-note">Amplia variedad de acabados</p>
+        {activeFinishesId ? (
+          <ServiceFinishesPanel
+            serviceId={activeFinishesId}
+            onBack={() => setActiveFinishesId(null)}
+          />
+        ) : (
+          <>
+            <h3>{copy.technicalTitle}</h3>
+            <p className="horizontal-detail__description">{copy.description}</p>
+            {(service.id === 'powder' || service.id === 'liquid') && (
+              <button
+                type="button"
+                className="horizontal-detail__finish-note"
+                onClick={() => setActiveFinishesId(service.id)}
+              >
+                VERSATILIDAD EN COLORES Y ACABADOS
+              </button>
+            )}
+          </>
         )}
       </aside>
     </motion.div>
@@ -362,7 +366,7 @@ function SectorPanel({ sector, onBackToSectors }) {
     description: sector.description,
     summary: sector.description,
   };
-  const images = showcaseImages;
+  const images = sectorImagesById[sector.id] ?? sectorImages;
   const {
     activeImageIndex,
     pauseCarousel,
@@ -409,6 +413,9 @@ function SectorPanel({ sector, onBackToSectors }) {
       <aside className="horizontal-detail__content">
         {copy.technicalTitle ? <h3>{copy.technicalTitle}</h3> : null}
         <p className="horizontal-detail__description">{copy.description}</p>
+        {copy.secondaryDescription ? (
+          <p className="horizontal-detail__description">{copy.secondaryDescription}</p>
+        ) : null}
       </aside>
     </motion.div>
   );
@@ -459,7 +466,6 @@ function AccordionIndexPanel({
     showPreviousImage,
     showNextImage,
   } = useImageCarousel(showcaseImages.length);
-  const activeImage = showcaseImages[activeImageIndex] ?? showcaseImages[0];
 
   return (
     <motion.div
@@ -470,19 +476,14 @@ function AccordionIndexPanel({
       variants={reveal.card}
     >
       <section className="horizontal-services__visual">
-        <div
-          className="horizontal-services__main-image"
-          onMouseEnter={pauseCarousel}
-          onMouseLeave={resumeCarousel}
-        >
-          <img src={activeImage.src} alt={activeImage.alt} />
-          <button type="button" className="horizontal-services__image-nav horizontal-services__image-nav--previous" onClick={showPreviousImage} aria-label="Imagen anterior">
-            &lsaquo;
-          </button>
-          <button type="button" className="horizontal-services__image-nav horizontal-services__image-nav--next" onClick={showNextImage} aria-label="Imagen siguiente">
-            &rsaquo;
-          </button>
-        </div>
+        <CoverflowFrame
+          images={showcaseImages}
+          activeImageIndex={activeImageIndex}
+          onPrevious={showPreviousImage}
+          onNext={showNextImage}
+          onPause={pauseCarousel}
+          onResume={resumeCarousel}
+        />
         <div className="horizontal-services__dots" aria-hidden="true">
           {showcaseImages.map((image, index) => (
             <span key={image.id} className={`horizontal-services__dot${index === activeImageIndex ? ' is-active' : ''}`} />

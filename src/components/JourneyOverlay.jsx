@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import '../styles/components/ServicesOverlay.scss';
+import FadeCarouselImage from './FadeCarouselImage';
 
 function JourneyOverlay({ isOpen, title, items, images, onClose, layout = 'default', onSelectItem }) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -13,6 +14,12 @@ function JourneyOverlay({ isOpen, title, items, images, onClose, layout = 'defau
   const isProcessLayout = layout === 'process';
   const midpoint = Math.ceil(items.length / 2);
   const processColumns = [items.slice(0, midpoint), items.slice(midpoint)];
+
+  useEffect(() => {
+    if (images.length > 0 && activeImageIndex >= images.length) {
+      setActiveImageIndex(0);
+    }
+  }, [activeImageIndex, images.length]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -56,6 +63,10 @@ function JourneyOverlay({ isOpen, title, items, images, onClose, layout = 'defau
   }, [images.length, isCarouselPaused, isOpen, isProcessLayout, manualChangeCount]);
 
   const showPreviousImage = () => {
+    if (images.length <= 1) {
+      return;
+    }
+
     setActiveImageIndex((currentIndex) => (
       currentIndex === 0 ? images.length - 1 : currentIndex - 1
     ));
@@ -63,6 +74,10 @@ function JourneyOverlay({ isOpen, title, items, images, onClose, layout = 'defau
   };
 
   const showNextImage = () => {
+    if (images.length <= 1) {
+      return;
+    }
+
     setActiveImageIndex((currentIndex) => (
       currentIndex === images.length - 1 ? 0 : currentIndex + 1
     ));
@@ -124,7 +139,7 @@ function JourneyOverlay({ isOpen, title, items, images, onClose, layout = 'defau
                   onMouseEnter={() => setIsCarouselPaused(true)}
                   onMouseLeave={() => setIsCarouselPaused(false)}
                 >
-                  <img src={activeImage.src} alt={activeImage.alt} />
+                  <FadeCarouselImage image={activeImage} />
                   {images.length > 1 && (
                     <>
                       <button

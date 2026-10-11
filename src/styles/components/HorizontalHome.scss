@@ -281,6 +281,11 @@
 
   .horizontal-services {
     width: clamp(1050px, 78vw, 1500px);
+    border-radius: 6px;
+  }
+
+  .horizontal-detail {
+    border-radius: 6px;
   }
 
   .horizontal-process {
@@ -374,6 +379,7 @@
   .horizontal-detail__image-frame {
     position: relative;
     overflow: hidden;
+    border-radius: 6px;
     background: #d4d0cb;
   }
 
@@ -393,10 +399,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-
-  .horizontal-services__detail-image img {
-    object-position: center 74%;
+    object-position: center center;
   }
 
   .horizontal-services__image-nav,
@@ -570,7 +573,7 @@
 
   .horizontal-detail__back {
     align-self: flex-start;
-    margin: 0 0 0.85rem;
+    margin: 0 0 1.35rem;
     color: rgba(255, 255, 255, 0.78);
     font-size: 0.72rem;
     font-weight: 600;
@@ -694,12 +697,142 @@
 
   .horizontal-detail__finish-note {
     margin: 0.4rem 0 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
     color: rgba(255, 255, 255, 0.9);
     font-size: 0.78rem;
     font-weight: 600;
     letter-spacing: 0.04em;
     line-height: 1.2;
+    text-align: left;
     text-transform: uppercase;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    &::after {
+      content: '';
+      display: block;
+      width: 100%;
+      margin-top: 0.28rem;
+      border-bottom: 1px solid currentColor;
+    }
+  }
+
+  .horizontal-detail__content .service-finishes-panel {
+    position: static;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    z-index: auto;
+  }
+
+  .horizontal-detail__content .service-finishes-panel__back {
+    margin: 0 0 0.95rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .horizontal-detail__content .service-finishes-panel__header {
+    width: 100%;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+  }
+
+  .horizontal-detail__content .service-finishes-panel__title {
+    margin: 0;
+    font-size: clamp(2rem, 2.4vw, 3rem);
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  .horizontal-detail__content .service-finishes-panel__subtitle {
+    margin: 0.38rem 0 0;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
+
+  .horizontal-detail__content .service-finishes-panel__grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px 16px;
+    align-items: start;
+    padding: 1.25rem 0 1.1rem;
+  }
+
+  .horizontal-detail__content .service-finishes-panel__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+    margin: 0;
+    text-align: center;
+  }
+
+  .horizontal-detail__content .service-finishes-panel__sample {
+    position: relative;
+    display: block;
+    width: 72px;
+    height: 72px;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.34);
+    border-radius: 999px;
+    background: linear-gradient(145deg, rgba(235, 236, 236, 0.94), rgba(178, 182, 184, 0.92));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      inset 0 -14px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .horizontal-detail__content .service-finishes-panel__sample img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  .horizontal-detail__content .service-finishes-panel__label {
+    max-width: 7.2rem;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.76rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
+  .horizontal-detail__content .service-finishes-panel__copy {
+    max-width: 20rem;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.9rem;
+    line-height: 1.4;
   }
 
   .horizontal-panel--contact {

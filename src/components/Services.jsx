@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import '../styles/components/Services.scss';
 import ServiceDetailOverlay from './ServiceDetailOverlay';
+import FadeCarouselImage from './FadeCarouselImage';
 
 export const showcaseImages = [
   {
@@ -10,14 +11,14 @@ export const showcaseImages = [
     alt: 'Proceso industrial de pulido',
   },
   {
-    id: 'pintura',
-    src: 'image/pintura1.png',
-    alt: 'Proceso industrial de pintura',
+    id: 'carrusel-servicios',
+    src: 'image/SERVICES/CARRUSEL_SERVICIOS.webp',
+    alt: 'Servicio industrial de tratamiento y recubrimiento',
   },
   {
-    id: 'empaquetado',
-    src: 'image/empaquetado.png',
-    alt: 'Zona industrial de empaquetado',
+    id: 'carrusel-servicios-2',
+    src: 'image/SERVICES/CARRUSEL_SERVICIOS 2.webp',
+    alt: 'Servicio industrial de pintura y recubrimiento',
   },
 ];
 
@@ -35,9 +36,9 @@ export const services = [
     id: 'liquid',
     title: 'Pintura líquida',
     summary:
-      'PINTURA LÍQUIDA DE ALTA PRECISIÓN',
+      'TRABAJOS DE PRECISIÓN PARA CADA PROYECTO',
     description:
-      'Aplicación de pintura líquida en piezas metálicas, plásticas y vítreas para obtener acabados uniformes, resistentes y de alta calidad.',
+      'Trabajamos con diferentes sistemas de aplicación para conseguir el resultado estético y técnico que requiere cada componente, desde colores y texturas hasta efectos y acabados especiales.',
     mediaClass: 'services-showcase__image--liquid',
   },
   {
@@ -56,14 +57,28 @@ function Services() {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedService, setSelectedService] = useState(null);
   const activeService = services.find((service) => service.id === activeId) ?? services[0];
-  const activeImage = showcaseImages[activeImageIndex];
+  const activeImage = showcaseImages[activeImageIndex] ?? showcaseImages[0];
+
+  useEffect(() => {
+    if (activeImageIndex >= showcaseImages.length) {
+      setActiveImageIndex(0);
+    }
+  }, [activeImageIndex]);
 
   const goToPrevious = () => {
+    if (showcaseImages.length <= 1) {
+      return;
+    }
+
     const nextIndex = activeImageIndex === 0 ? showcaseImages.length - 1 : activeImageIndex - 1;
     setActiveImageIndex(nextIndex);
   };
 
   const goToNext = () => {
+    if (showcaseImages.length <= 1) {
+      return;
+    }
+
     const nextIndex = activeImageIndex === showcaseImages.length - 1 ? 0 : activeImageIndex + 1;
     setActiveImageIndex(nextIndex);
   };
@@ -119,11 +134,7 @@ function Services() {
           variants={leftReveal}
         >
           <div className={`services-showcase__image services-showcase__image--lead ${activeService.mediaClass}`}>
-            <img
-              src={activeImage.src}
-              alt={activeImage.alt}
-              className="services-showcase__photo"
-            />
+            <FadeCarouselImage image={activeImage} className="services-showcase__photo" />
             <button
               type="button"
               className="services-showcase__nav services-showcase__nav--prev"
