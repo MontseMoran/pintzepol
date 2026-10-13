@@ -53,6 +53,15 @@ function Contact({
       <p><strong>Email:</strong> <a href={`mailto:${company.email}`}>{company.email}</a></p>
       <p><strong>Teléfono:</strong> <a href={`tel:${company.phoneTel}`}>{company.phoneDisplay}</a></p>
       <p><strong>Dirección:</strong> {company.address}</p>
+      <div className="contact-overlay__hours">
+        <strong>Horario:</strong>
+        {company.hours.map((item) => (
+          <p key={item.days}>
+            <span>{item.days}</span>
+            <span>{item.time}</span>
+          </p>
+        ))}
+      </div>
     </>
   );
 

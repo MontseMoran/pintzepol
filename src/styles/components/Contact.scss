@@ -53,6 +53,23 @@
     font-size: 0.9rem;
   }
 
+  &__hours {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+
+    strong {
+      display: block;
+      margin-bottom: 0.35rem;
+    }
+
+    p {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.25rem;
+    }
+  }
+
   &__map {
     width: 100%;
     min-height: 14rem;

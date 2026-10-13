@@ -35,6 +35,16 @@ export const company = {
   email: 'info@pintzepol.com',
   phoneDisplay: '93 699 01 20',
   phoneTel: '+34936990120',
+  hours: [
+    {
+      days: 'Lunes a viernes',
+      time: '6:00–14:00',
+    },
+    {
+      days: 'Sábado y domingo',
+      time: 'Cerrado',
+    },
+  ],
   registry:
     'Registro Mercantil de Barcelona, tomo/sección 8.ª, hoja B-626579, inscripción 1.ª, de 24 de diciembre de 2024',
   aepdUrl: 'https://www.aepd.es',
