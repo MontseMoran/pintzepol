@@ -19,6 +19,22 @@
     margin: 0;
   }
 
+  &__signature {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: rgba(255, 255, 255, 0.72);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  &__signature-mark {
+    width: 0.9rem;
+    height: 0.9rem;
+    flex: 0 0 auto;
+    fill: currentColor;
+  }
+
   nav {
     display: flex;
     align-items: center;
@@ -47,6 +63,12 @@
     gap: 0.45rem;
     padding: 0 0.5rem;
     font-size: 0.56rem;
+
+    .site-footer__signature span {
+      max-width: 8.5rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   @media (min-width: 900px) {

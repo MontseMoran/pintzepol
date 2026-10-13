@@ -10,7 +10,7 @@ function Navigation({ onOpenContact, onOpenServices, onOpenSectores, onOpenProce
     { href: '#servicios', label: 'SERVICIOS', panelId: 'servicios', action: onNavigate ? undefined : onOpenServices },
     { href: '#sectores', label: 'SECTORES', panelId: 'sectores', action: onNavigate ? undefined : onOpenSectores },
     { href: '#procesos', label: 'PROCESOS', panelId: 'procesos', action: onNavigate ? undefined : onOpenProcesos },
-    { href: '#contacto', label: 'UBICACIÓN', action: onOpenContact },
+    { href: '#contacto', label: 'CONTACTO', panelId: 'contacto', action: onNavigate ? undefined : onOpenContact },
   ];
 
   const handleToggle = () => {

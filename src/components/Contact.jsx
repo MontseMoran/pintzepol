@@ -34,7 +34,16 @@ function LocationMap({ mapsConsent, onAcceptMaps }) {
   );
 }
 
-function Contact({ isOpen, inline = false, onClose, mapsConsent = false, onAcceptMaps }) {
+function Contact({
+  isOpen,
+  inline = false,
+  onClose,
+  mapsConsent = false,
+  onAcceptMaps,
+  title = 'CONTACTO',
+  showMap = true,
+  sectionId = 'contacto',
+}) {
   if (!isOpen) {
     return null;
   }
@@ -49,14 +58,17 @@ function Contact({ isOpen, inline = false, onClose, mapsConsent = false, onAccep
 
   if (inline) {
     return (
-      <section id="contacto" className="contact-overlay__panel contact-overlay__panel--inline">
+      <section id={sectionId} className="contact-overlay__panel contact-overlay__panel--inline">
         <div className="contact-overlay__intro">
-          <h2 id="contact-overlay-title">UBICACIÓN</h2>
+          <h2 id="contact-overlay-title">{title}</h2>
           <div className="contact-overlay__details">
             {details}
           </div>
+          <figure className="contact-overlay__image" aria-hidden="true">
+            <img src={`${import.meta.env.BASE_URL}image/contacto.webp`} alt="" />
+          </figure>
         </div>
-        <LocationMap mapsConsent={mapsConsent} onAcceptMaps={onAcceptMaps} />
+        {showMap && <LocationMap mapsConsent={mapsConsent} onAcceptMaps={onAcceptMaps} />}
       </section>
     );
   }
@@ -72,9 +84,12 @@ function Contact({ isOpen, inline = false, onClose, mapsConsent = false, onAccep
         >
           ×
         </button>
-        <h2 id="contact-overlay-title">UBICACIÓN</h2>
+        <h2 id="contact-overlay-title">{title}</h2>
         {details}
-        <LocationMap mapsConsent={mapsConsent} onAcceptMaps={onAcceptMaps} />
+        <figure className="contact-overlay__image" aria-hidden="true">
+          <img src={`${import.meta.env.BASE_URL}image/contacto.webp`} alt="" />
+        </figure>
+        {showMap && <LocationMap mapsConsent={mapsConsent} onAcceptMaps={onAcceptMaps} />}
       </section>
     </div>
   );

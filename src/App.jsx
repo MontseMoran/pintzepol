@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
+import { motion, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
 import Header from './components/Header';
 import PaintLogo from './components/PaintLogo';
 import Navigation from './components/Navigation';
@@ -28,13 +28,26 @@ function App() {
   const horizontalStoryRef = useRef(null);
   const heroVideoRef = useRef(null);
   const scrollPositionRef = useRef(0);
-  const panelIds = ['inicio', 'servicios', 'powder', 'liquid', 'technical', 'sectores', 'transporte', 'industria', 'salud', 'tecnologia', 'procesos', 'contacto'];
-  const panelLabels = ['INICIO', 'SERVICIOS', 'PINTURA EN POLVO', 'PINTURA LÍQUIDA', 'TRATAMIENTOS', 'SECTORES', 'TRANSPORTE', 'INDUSTRIA', 'SALUD', 'TECNOLOGÍA', 'PROCESOS', 'UBICACIÓN'];
+  const panelIds = ['inicio', 'servicios', 'sectores', 'procesos', 'contacto'];
+  const panelLabels = ['INICIO', 'SERVICIOS', 'SECTORES', 'PROCESOS', 'CONTACTO'];
   const panelCount = panelIds.length;
+  const processesPanelIndex = panelIds.indexOf('procesos');
+  const maxPanelIndex = panelCount - 1;
+  const processesStart = Math.max((processesPanelIndex - 1) / maxPanelIndex, 0);
+  const processesEnd = processesPanelIndex / maxPanelIndex;
   const { scrollYProgress } = useScroll({
     target: horizontalStoryRef,
     offset: ['start start', 'end end'],
   });
+  const processesProgress = useTransform(
+    scrollYProgress,
+    [
+      processesStart,
+      processesEnd,
+    ],
+    [0, 1],
+    { clamp: true },
+  );
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
@@ -300,9 +313,9 @@ function App() {
                 />
               </section>
               <HorizontalHome
-                onSelectService={scrollToPanel}
                 mapsConsent={cookieConsent === 'maps'}
                 onAcceptMaps={() => updateCookieConsent('maps')}
+                processesProgress={processesProgress}
               />
             </div>
           </div>

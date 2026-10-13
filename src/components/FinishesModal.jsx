@@ -37,7 +37,7 @@ export function FinishesPanel({ serviceId, onBack, closeButtonRef, closeLabel = 
       <div className="finishes-modal__options">
         {finishGroup.items.map((finish) => (
           <figure className="finishes-modal__option" key={finish.id ?? finish.name}>
-            <span className="finishes-modal__sample" aria-hidden="true">
+            <span className={`finishes-modal__sample finishes-modal__sample--${finish.id}`} aria-hidden="true">
               {finish.image && (
                 <img
                   className={`finishes-modal__image finishes-modal__image--${finish.id}`}
@@ -97,7 +97,7 @@ export function ServiceFinishesPanel({ serviceId, onBack }) {
       <div className="service-finishes-panel__grid">
         {finishGroup.items.map((finish) => (
           <figure className="service-finishes-panel__item" key={finish.id ?? finish.name}>
-            <span className="service-finishes-panel__sample" aria-hidden="true">
+            <span className={`service-finishes-panel__sample service-finishes-panel__sample--${finish.id}`} aria-hidden="true">
               {finish.image && (
                 <img
                   className={`service-finishes-panel__image service-finishes-panel__image--${finish.id}`}

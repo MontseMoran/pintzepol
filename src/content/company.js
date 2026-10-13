@@ -39,9 +39,9 @@ export const company = {
     'Registro Mercantil de Barcelona, tomo/sección 8.ª, hoja B-626579, inscripción 1.ª, de 24 de diciembre de 2024',
   aepdUrl: 'https://www.aepd.es',
   mapsEmbedUrl:
-    'https://maps.google.com/maps?q=Calle%20Sardana%207-9%2C%20Pol%C3%ADgono%20Industrial%20Cova%20Solera%2C%2008191%20Rub%C3%AD%2C%20Barcelona&hl=es&z=17&output=embed',
+    'https://maps.google.com/maps?q=PINTZEPOL%2C%20Calle%20Sardana%207-9%2C%20Pol%C3%ADgono%20Industrial%20Cova%20Solera%2C%2008191%20Rub%C3%AD%2C%20Barcelona&hl=es&z=18&output=embed',
   mapsExternalUrl:
-    'https://www.google.com/maps/search/?api=1&query=Calle%20Sardana%207-9%2C%20Pol%C3%ADgono%20Industrial%20Cova%20Solera%2C%2008191%20Rub%C3%AD',
+    'https://www.google.com/maps/search/?api=1&query=PINTZEPOL%2C%20Calle%20Sardana%207-9%2C%20Pol%C3%ADgono%20Industrial%20Cova%20Solera%2C%2008191%20Rub%C3%AD%2C%20Barcelona',
 };
 
 export const sectors = [

@@ -22,6 +22,7 @@ const finishes = [
   {
     id: 'gofrado',
     name: 'Gofrado',
+    image: `${import.meta.env.BASE_URL}image/acabados/gofrado.webp`,
   },
   {
     id: 'perlado',
@@ -30,18 +31,22 @@ const finishes = [
   {
     id: 'metalizado',
     name: 'Metalizado',
+    image: `${import.meta.env.BASE_URL}image/acabados/metalizado.png`,
   },
   {
     id: 'efecto-forja',
     name: 'Efecto forja',
+    image: `${import.meta.env.BASE_URL}image/acabados/forja.png`,
   },
   {
     id: 'texturado',
     name: 'Texturado',
+    image: `${import.meta.env.BASE_URL}image/acabados/texturado.png`,
   },
   {
     id: 'microtexturado',
     name: 'Microtexturado',
+    image: `${import.meta.env.BASE_URL}image/acabados/microtexturado.png`,
   },
 ];
 

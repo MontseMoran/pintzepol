@@ -77,6 +77,22 @@
     }
   }
 
+  &__image {
+    width: 100%;
+    margin: 1.15rem 0 0;
+    overflow: hidden;
+    border-radius: 6px;
+    background: rgba(34, 34, 34, 0.08);
+
+    img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1624 / 968;
+      object-fit: cover;
+      object-position: center center;
+    }
+  }
+
   a {
     color: inherit;
     text-decoration: underline;
@@ -127,6 +143,15 @@
 @media (min-width: 1024px) {
   .contact-overlay__panel--inline {
     width: min(100%, 42rem);
-    padding: 3rem 1.5rem 1.5rem;
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
+  .contact-overlay__panel--inline .contact-overlay__intro h2 {
+    margin-bottom: 1.2rem;
+  }
+
+  .contact-overlay__panel--inline .contact-overlay__image {
+    margin-top: 1rem;
+    max-width: 26rem;
   }
 }

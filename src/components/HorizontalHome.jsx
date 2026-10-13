@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { services, showcaseImages } from './Services';
 import { processSteps, sectors } from '../content/company';
 import Contact from './Contact';
@@ -8,6 +8,33 @@ import FadeCarouselImage from './FadeCarouselImage';
 import '../styles/components/HorizontalHome.scss';
 
 const cardViewport = { once: true, amount: 0.32 };
+const processTimelineViewport = { once: false, amount: 0.82 };
+const processStepDelays = [0.05, 0.32, 0.6, 0.88, 1.04, 1.43, 1.78];
+const processEase = [0.22, 1, 0.36, 1];
+const processMarkerInitial = {
+  opacity: 0.46,
+  borderColor: 'rgba(201, 207, 255, 0.42)',
+  backgroundColor: 'rgba(36, 43, 110, 0.34)',
+  boxShadow: '0 0 0 5px rgba(36, 43, 110, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.18)',
+};
+const processMarkerActive = {
+  opacity: 1,
+  borderColor: [
+    'rgba(201, 207, 255, 0.42)',
+    'rgba(246, 248, 255, 0.98)',
+    'rgba(218, 225, 255, 0.86)',
+  ],
+  backgroundColor: [
+    'rgba(36, 43, 110, 0.34)',
+    'rgba(92, 103, 178, 0.58)',
+    'rgba(36, 43, 110, 0.66)',
+  ],
+  boxShadow: [
+    '0 0 0 5px rgba(36, 43, 110, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.18)',
+    '0 0 0 7px rgba(170, 185, 255, 0.22), 0 0 14px rgba(178, 194, 255, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.34)',
+    '0 0 0 5px rgba(36, 43, 110, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.28)',
+  ],
+};
 
 function useCardReveal() {
   const prefersReducedMotion = useReducedMotion();
@@ -192,6 +219,21 @@ const sectorImagesById = {
     { id: 'transporte-2', src: `${import.meta.env.BASE_URL}image/SECTORES/TRANSPORTE/TRANSPORTE_NAVAL.webp`, alt: 'Pieza para transporte naval' },
     { id: 'transporte-3', src: `${import.meta.env.BASE_URL}image/SECTORES/TRANSPORTE/TRANSPORTE_AUTOMOCIÓN.webp`, alt: 'Pieza para automoción' },
   ],
+  industria: [
+    { id: 'industria-1', src: `${import.meta.env.BASE_URL}image/SECTORES/Industria/CARRUSEL INDUSTRIA MOBILIARIO.webp`, alt: 'Pieza de mobiliario para industria' },
+    { id: 'industria-2', src: `${import.meta.env.BASE_URL}image/SECTORES/Industria/CARRUSEL INDUSTRIA MAQUINARIA.webp`, alt: 'Componente de maquinaria industrial' },
+    { id: 'industria-3', src: `${import.meta.env.BASE_URL}image/SECTORES/Industria/CARRUSEL INDUSTRIA PLASTICO.webp`, alt: 'Componente plástico para industria' },
+  ],
+  salud: [
+    { id: 'salud-1', src: `${import.meta.env.BASE_URL}image/SECTORES/salud/CARRUSEL SALUD CAMILLA.webp`, alt: 'Equipamiento sanitario' },
+    { id: 'salud-2', src: `${import.meta.env.BASE_URL}image/SECTORES/salud/CARRUSEL COSMÉTICA.webp`, alt: 'Envase para cosmética y cuidado personal' },
+    { id: 'salud-3', src: `${import.meta.env.BASE_URL}image/SECTORES/salud/CARRUSEL SALUD VIDRIO.webp`, alt: 'Elemento de vidrio para salud y cosmética' },
+  ],
+  tecnologia: [
+    { id: 'tecnologia-1', src: `${import.meta.env.BASE_URL}image/SECTORES/Tecnología/CARRUSEL TECNOLOGIA ASCENSOR.webp`, alt: 'Componente tecnológico para ascensor' },
+    { id: 'tecnologia-2', src: `${import.meta.env.BASE_URL}image/SECTORES/Tecnología/CARRUSEL TECNOLOGIA COMPONENTES.webp`, alt: 'Componentes tecnológicos' },
+    { id: 'tecnologia-3', src: `${import.meta.env.BASE_URL}image/SECTORES/Tecnología/CARRUSEL TECNOLOGIA CASINO.webp`, alt: 'Componente tecnológico para equipamiento especializado' },
+  ],
 };
 
 export const sectorDetailCopy = {
@@ -204,21 +246,24 @@ export const sectorDetailCopy = {
   },
   industria: {
     title: 'INDUSTRIA',
-    technicalTitle: 'ACABADOS DE ALTA RESISTENCIA Y DURABILIDAD',
-    description: 'Recubrimientos resistentes y duraderos que protegen y mejoran piezas industriales, garantizando uniformidad, calidad y fiabilidad a largo plazo.',
-    summary: 'SOLUCIONES DE PINTADO Y TRATAMIENTO DE SUPERFICIES ADAPTADAS A LAS EXIGENCIAS DE CADA SECTOR INDUSTRIAL',
+    technicalTitle: 'COMPONENTES PARA UNA INDUSTRIA EN CONSTANTE EVOLUCIÓN',
+    description: 'Desde elementos de maquinaria y mobiliario hasta piezas de iluminación y componentes plásticos, trabajamos con una amplia variedad de productos destinados a diferentes sectores y aplicaciones.',
+    secondaryDescription: 'UNA EXPERIENCIA INDUSTRIAL QUE ABARCA MÚLTIPLES PRODUCTOS, SECTORES Y NECESIDADES.',
+    summary: 'DE LA PIEZA INDIVIDUAL AL CONJUNTO INDUSTRIAL, CADA PROYECTO REQUIERE UN ENFOQUE DIFERENTE',
   },
   salud: {
     title: 'SALUD',
-    technicalTitle: 'ACABADOS DE ALTA RESISTENCIA Y DURABILIDAD',
-    description: 'Recubrimientos resistentes y duraderos que protegen y mejoran piezas industriales, garantizando uniformidad, calidad y fiabilidad a largo plazo.',
-    summary: 'SOLUCIONES DE PINTADO Y TRATAMIENTO DE SUPERFICIES ADAPTADAS A LAS EXIGENCIAS DE CADA SECTOR INDUSTRIAL',
+    technicalTitle: 'PRECISIÓN PARA SECTORES ESPECIALIZADOS',
+    description: 'Trabajamos con fabricantes de productos sanitarios, cosméticos y de cuidado personal, tratando diferentes piezas y elementos que forman parte de sus productos y envases.',
+    secondaryDescription: 'CUIDAMOS CADA ELEMENTO PARA QUE FORME PARTE DE UN RESULTADO FINAL COHERENTE Y FUNCIONAL',
+    summary: 'VIDRIO · ENVASES · COMPONENTES SANITARIOS · EQUIPAMIENTO · CUIDADO PERSONAL',
   },
   tecnologia: {
     title: 'TECNOLOGÍA',
-    technicalTitle: 'ACABADOS DE ALTA RESISTENCIA Y DURABILIDAD',
-    description: 'Recubrimientos resistentes y duraderos que protegen y mejoran piezas industriales, garantizando uniformidad, calidad y fiabilidad a largo plazo.',
-    summary: 'SOLUCIONES DE PINTADO Y TRATAMIENTO DE SUPERFICIES ADAPTADAS A LAS EXIGENCIAS DE CADA SECTOR INDUSTRIAL',
+    technicalTitle: 'COMPONENTES PARA LA NUEVA GENERACIÓN TECNOLÓGICA',
+    description: 'Ponemos en valor piezas y componentes tecnológicos mediante su acabado, desde carcasas y estructuras hasta pequeños elementos destinados a equipos electrónicos.',
+    secondaryDescription: 'UN ACABADO CUIDADO PARA COMPONENTES QUE FORMAN PARTE DE CADA DISPOSITIVO.',
+    summary: 'PRECISIÓN Y CUIDADO EN CADA PIEZA QUE FORMA PARTE DE LA TECNOLOGÍA.',
   },
 };
 
@@ -421,31 +466,150 @@ function SectorPanel({ sector, onBackToSectors }) {
   );
 }
 
+function ProcessTimelineStep({ item, index, isActive }) {
+  const delay = processStepDelays[index] ?? 0;
+
+  return (
+    <li className="horizontal-process__item">
+      <motion.span
+        className="horizontal-process__number"
+        initial={{ opacity: 0.45 }}
+        animate={isActive ? { opacity: 1 } : { opacity: 0.45 }}
+        transition={{ duration: 0.22, delay, ease: processEase }}
+      >
+        {String(index + 1).padStart(2, '0')}
+      </motion.span>
+      <motion.span
+        className="horizontal-process__marker"
+        aria-hidden="true"
+        initial={processMarkerInitial}
+        animate={isActive ? processMarkerActive : processMarkerInitial}
+        transition={{ duration: 0.22, delay, ease: processEase }}
+      />
+      <motion.div
+        className="horizontal-process__text"
+        initial={{ opacity: 0.42 }}
+        animate={isActive ? { opacity: 1 } : { opacity: 0.42 }}
+        transition={{ duration: 0.22, delay: delay + 0.04, ease: processEase }}
+      >
+        <h3>{item.title}</h3>
+        <p>{item.description}</p>
+      </motion.div>
+    </li>
+  );
+}
+
 function ProcessGridPanel({ title, items }) {
   const reveal = useCardReveal();
-  const midpoint = Math.ceil(items.length / 2);
-  const columns = [items.slice(0, midpoint), items.slice(midpoint)];
+  const processCardRef = useRef(null);
+  const isProcessTimelineReady = useInView(processCardRef, processTimelineViewport);
+  const processImage = `${import.meta.env.BASE_URL}image/procesos/Industrial Worker Coating Suspended Machinery.webp`;
+  const firstRowItems = items.slice(0, 4);
+  const secondRowItems = items.slice(4);
 
   return (
     <motion.div
+      ref={processCardRef}
       className="horizontal-process"
       initial="hidden"
       whileInView="visible"
       viewport={cardViewport}
       variants={reveal.card}
     >
-      <h2>{title}</h2>
-      <div className="horizontal-process__grid">
-        {columns.map((columnItems, columnIndex) => (
-          <ul key={columnIndex} className="horizontal-process__column">
-            {columnItems.map((item) => (
-              <li key={item.id} className="horizontal-process__item">
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-              </li>
+      <img
+        className="horizontal-process__visual"
+        src={processImage}
+        alt=""
+        aria-hidden="true"
+      />
+      <div className="horizontal-process__overlay" aria-hidden="true" />
+      <div className="horizontal-process__content">
+        <header className="horizontal-process__intro">
+          <h2>{title}</h2>
+          <p className="horizontal-process__subtitle">
+            UN RECUBRIMIENTO DE ALTA CALIDAD A TRAVÉS DE UN PROCESO CONTROLADO
+          </p>
+          <p className="horizontal-process__copy">
+            Combinamos tecnología, experiencia y un control riguroso en cada fase del proceso para garantizar un acabado resistente, uniforme y duradero.
+          </p>
+        </header>
+
+        <div className="horizontal-process__timeline" aria-label="Fases del proceso">
+          <ol className="horizontal-process__timeline-row horizontal-process__timeline-row--first">
+            <motion.span
+              className="horizontal-process__line horizontal-process__line--active"
+              initial={{ scaleX: 0 }}
+              animate={isProcessTimelineReady ? { scaleX: 1 } : { scaleX: 0 }}
+              transition={{
+                duration: 0.88,
+                delay: 0,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              aria-hidden="true"
+            />
+            <span className="horizontal-process__pulse-track" aria-hidden="true">
+              <motion.span
+                className="horizontal-process__pulse"
+                initial={{ left: '0%', opacity: 0 }}
+                animate={isProcessTimelineReady ? {
+                  left: ['0%', '100%'],
+                  opacity: [0, 1, 1, 0],
+                } : { left: '0%', opacity: 0 }}
+                transition={{
+                  duration: 0.88,
+                  delay: 0,
+                  ease: processEase,
+                  times: [0, 0.08, 0.88, 1],
+                }}
+              />
+            </span>
+            {firstRowItems.map((item, index) => (
+              <ProcessTimelineStep
+                key={item.id}
+                item={item}
+                index={index}
+                isActive={isProcessTimelineReady}
+              />
             ))}
-          </ul>
-        ))}
+          </ol>
+          <ol className="horizontal-process__timeline-row horizontal-process__timeline-row--second">
+            <motion.span
+              className="horizontal-process__line horizontal-process__line--active"
+              initial={{ scaleX: 0 }}
+              animate={isProcessTimelineReady ? { scaleX: 1 } : { scaleX: 0 }}
+              transition={{
+                duration: 0.74,
+                delay: 1.04,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              aria-hidden="true"
+            />
+            <span className="horizontal-process__pulse-track" aria-hidden="true">
+              <motion.span
+                className="horizontal-process__pulse"
+                initial={{ left: '0%', opacity: 0 }}
+                animate={isProcessTimelineReady ? {
+                  left: ['0%', '100%'],
+                  opacity: [0, 1, 1, 0],
+                } : { left: '0%', opacity: 0 }}
+                transition={{
+                  duration: 0.74,
+                  delay: 1.04,
+                  ease: processEase,
+                  times: [0, 0.1, 0.86, 1],
+                }}
+              />
+            </span>
+            {secondRowItems.map((item, index) => (
+              <ProcessTimelineStep
+                key={item.id}
+                item={item}
+                index={index + 4}
+                isActive={isProcessTimelineReady}
+              />
+            ))}
+          </ol>
+        </div>
       </div>
     </motion.div>
   );
@@ -542,8 +706,12 @@ function AccordionIndexPanel({
   );
 }
 
-function HorizontalHome({ onSelectService, mapsConsent, onAcceptMaps }) {
+function HorizontalHome({ mapsConsent, onAcceptMaps }) {
   const reveal = useCardReveal();
+  const [activeServiceDetail, setActiveServiceDetail] = useState(null);
+  const [activeSectorDetail, setActiveSectorDetail] = useState(null);
+  const selectedService = services.find((service) => service.id === activeServiceDetail) ?? null;
+  const selectedSector = sectors.find((sector) => sector.id === activeSectorDetail) ?? null;
 
   return (
     <>
@@ -552,53 +720,45 @@ function HorizontalHome({ onSelectService, mapsConsent, onAcceptMaps }) {
         className="horizontal-panel horizontal-panel--services"
         data-panel-id="servicios"
       >
-        <ServicesIndexPanel onSelectService={onSelectService} />
-      </section>
-      {services.map((service) => (
-        <section
-          key={service.id}
-          id={`servicio-${service.id}`}
-          className="horizontal-panel horizontal-panel--detail"
-          data-panel-id={service.id}
-        >
+        {selectedService ? (
           <ServicePanel
-            service={service}
-            onBackToServices={() => onSelectService('servicios')}
+            service={selectedService}
+            onBackToServices={() => setActiveServiceDetail(null)}
           />
-        </section>
-      ))}
+        ) : (
+          <ServicesIndexPanel onSelectService={setActiveServiceDetail} />
+        )}
+      </section>
       <section
         id="sectores"
         className="horizontal-panel horizontal-panel--services"
         data-panel-id="sectores"
       >
-        <AccordionIndexPanel
-          title="SECTORES"
-          items={sectors}
-          onSelectItem={onSelectService}
-        />
-      </section>
-      {sectors.map((sector) => (
-        <section
-          key={sector.id}
-          id={`sector-${sector.id}`}
-          className="horizontal-panel horizontal-panel--detail"
-          data-panel-id={sector.id}
-        >
+        {selectedSector ? (
           <SectorPanel
-            sector={sector}
-            onBackToSectors={() => onSelectService('sectores')}
+            sector={selectedSector}
+            onBackToSectors={() => setActiveSectorDetail(null)}
           />
-        </section>
-      ))}
+        ) : (
+          <AccordionIndexPanel
+            title="SECTORES"
+            items={sectors}
+            onSelectItem={setActiveSectorDetail}
+          />
+        )}
+      </section>
       <section
         id="procesos"
-        className="horizontal-panel horizontal-panel--services"
+        className="horizontal-panel horizontal-panel--services horizontal-panel--processes"
         data-panel-id="procesos"
       >
-        <ProcessGridPanel title="PROCESOS" items={processSteps} />
+        <ProcessGridPanel
+          title="PROCESOS"
+          items={processSteps}
+        />
       </section>
       <section
+        id="contacto"
         className="horizontal-panel horizontal-panel--contact"
         data-panel-id="contacto"
       >
@@ -612,6 +772,8 @@ function HorizontalHome({ onSelectService, mapsConsent, onAcceptMaps }) {
           <Contact
             isOpen
             inline
+            sectionId="contacto-contenido"
+            title="CONTACTO"
             mapsConsent={mapsConsent}
             onAcceptMaps={onAcceptMaps}
           />
