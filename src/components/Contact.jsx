@@ -64,11 +64,11 @@ function Contact({
           <div className="contact-overlay__details">
             {details}
           </div>
-          <figure className="contact-overlay__image" aria-hidden="true">
-            <img src={`${import.meta.env.BASE_URL}image/contacto.webp`} alt="" />
-          </figure>
+          {showMap && <LocationMap mapsConsent={mapsConsent} onAcceptMaps={onAcceptMaps} />}
         </div>
-        {showMap && <LocationMap mapsConsent={mapsConsent} onAcceptMaps={onAcceptMaps} />}
+        <figure className="contact-overlay__image" aria-hidden="true">
+          <img src={`${import.meta.env.BASE_URL}image/contacto.webp`} alt="" />
+        </figure>
       </section>
     );
   }

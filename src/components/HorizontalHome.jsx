@@ -3,7 +3,7 @@ import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { services, showcaseImages } from './Services';
 import { processSteps, sectors } from '../content/company';
 import Contact from './Contact';
-import { ServiceFinishesPanel } from './FinishesModal';
+import { ServiceFinishesPanel, SpecialCoatingsPanel } from './FinishesModal';
 import FadeCarouselImage from './FadeCarouselImage';
 import '../styles/components/HorizontalHome.scss';
 
@@ -317,7 +317,7 @@ function ServicesIndexPanel({ onSelectService }) {
           ))}
         </div>
         <div className="horizontal-services__detail-image">
-          <img src={`${import.meta.env.BASE_URL}image/maquinas.png`} alt="Maquinaria y herramientas para tratamientos técnicos" />
+          <img src={`${import.meta.env.BASE_URL}image/SERVICES/services2.jpg`} alt="Maquinaria y herramientas para tratamientos técnicos" />
         </div>
       </section>
     </motion.div>
@@ -327,6 +327,13 @@ function ServicesIndexPanel({ onSelectService }) {
 function ServicePanel({ service, onBackToServices }) {
   const reveal = useCardReveal();
   const [activeFinishesId, setActiveFinishesId] = useState(null);
+  const [isSpecialCoatingsOpen, setIsSpecialCoatingsOpen] = useState(false);
+  const fontTestClassByServiceId = {
+    powder: 'horizontal-detail--powder-font-test',
+    liquid: 'horizontal-detail--liquid-font-test',
+    technical: 'horizontal-detail--treatments-font-test',
+  };
+  const fontTestClass = fontTestClassByServiceId[service.id] ?? '';
   const copy = detailCopy[service.id] ?? {
     title: service.title.toUpperCase(),
     technicalTitle: service.summary,
@@ -342,9 +349,14 @@ function ServicePanel({ service, onBackToServices }) {
     showNextImage,
   } = useImageCarousel(images.length);
 
+  useEffect(() => {
+    setActiveFinishesId(null);
+    setIsSpecialCoatingsOpen(false);
+  }, [service.id]);
+
   return (
     <motion.div
-      className="horizontal-detail"
+      className={`horizontal-detail${fontTestClass ? ` ${fontTestClass}` : ''}`}
       initial="hidden"
       whileInView="visible"
       viewport={cardViewport}
@@ -383,6 +395,10 @@ function ServicePanel({ service, onBackToServices }) {
             serviceId={activeFinishesId}
             onBack={() => setActiveFinishesId(null)}
           />
+        ) : isSpecialCoatingsOpen ? (
+          <SpecialCoatingsPanel
+            onBack={() => setIsSpecialCoatingsOpen(false)}
+          />
         ) : (
           <>
             <h3>{copy.technicalTitle}</h3>
@@ -394,6 +410,15 @@ function ServicePanel({ service, onBackToServices }) {
                 onClick={() => setActiveFinishesId(service.id)}
               >
                 VERSATILIDAD EN COLORES Y ACABADOS
+              </button>
+            )}
+            {service.id === 'technical' && (
+              <button
+                type="button"
+                className="horizontal-detail__finish-note"
+                onClick={() => setIsSpecialCoatingsOpen(true)}
+              >
+                VER RECUBRIMIENTOS ESPECIALES
               </button>
             )}
           </>

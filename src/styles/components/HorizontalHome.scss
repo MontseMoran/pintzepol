@@ -263,7 +263,6 @@
     margin: 0 auto;
     padding: clamp(16px, 1.2vw, 24px) clamp(18px, 1.5vw, 28px);
     border: 1px solid rgba(110, 125, 255, 0.22);
-    background: rgba(36, 43, 110, 0.78);
     color: #FFFFFF;
     box-shadow:
       0 18px 45px rgba(0, 0, 0, 0.16),
@@ -286,10 +285,12 @@
   .horizontal-services {
     width: clamp(1050px, 78vw, 1500px);
     border-radius: 6px;
+    background: rgba(36, 43, 110, 0.92);
   }
 
   .horizontal-detail {
     border-radius: 6px;
+    background: rgba(36, 43, 110, 0.92);
   }
 
   .horizontal-process {
@@ -322,6 +323,8 @@
     opacity: 0.24;
     filter: grayscale(1);
     mix-blend-mode: luminosity;
+    mask-image: linear-gradient(90deg, #000 0%, #000 54%, rgba(0, 0, 0, 0.42) 72%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 54%, rgba(0, 0, 0, 0.42) 72%, transparent 100%);
   }
 
   .horizontal-process__overlay {
@@ -333,8 +336,8 @@
         90deg,
         rgba(36, 43, 110, 0.72) 0%,
         rgba(36, 43, 110, 0.62) 42%,
-        rgba(36, 43, 110, 0.34) 72%,
-        rgba(36, 43, 110, 0.12) 100%
+        rgba(36, 43, 110, 0.24) 72%,
+        rgba(36, 43, 110, 0) 100%
       );
   }
 
@@ -383,6 +386,7 @@
     color: rgba(255, 255, 255, 0.76);
     font-size: clamp(14px, 1vw, 17px);
     font-weight: 400;
+    letter-spacing: 0.012em;
     line-height: 1.45;
   }
 
@@ -608,6 +612,10 @@
     object-position: center center;
   }
 
+  .horizontal-services__detail-image img {
+    object-position: center 72%;
+  }
+
   .horizontal-services__image-nav,
   .horizontal-detail__image-nav {
     position: absolute;
@@ -675,7 +683,7 @@
     color: #FFFFFF;
     font-size: clamp(56px, 4.2vw, 72px);
     font-weight: 400;
-    letter-spacing: -0.055em;
+    letter-spacing: -0.02em;
     line-height: 0.95;
   }
 
@@ -721,7 +729,8 @@
     margin: 0 0 0.85rem;
     color: rgba(255, 255, 255, 0.82);
     font-size: clamp(13px, 1vw, 16px);
-    line-height: 1.35;
+    letter-spacing: 0.012em;
+    line-height: 1.4;
   }
 
   .horizontal-services--compact {
@@ -880,7 +889,8 @@
     color: rgba(255, 255, 255, 0.82);
     font-size: clamp(13px, 1vw, 17px);
     font-weight: 600;
-    line-height: 1.25;
+    letter-spacing: 0.05em;
+    line-height: 1.3;
     text-transform: uppercase;
   }
 
@@ -889,8 +899,8 @@
     color: #FFFFFF;
     font-size: clamp(24px, 2vw, 38px);
     font-weight: 400;
-    letter-spacing: -0.035em;
-    line-height: 0.95;
+    letter-spacing: -0.01em;
+    line-height: 1.06;
     text-transform: uppercase;
   }
 
@@ -898,7 +908,8 @@
     margin: 0;
     color: rgba(255, 255, 255, 0.82);
     font-size: clamp(14px, 1vw, 18px);
-    line-height: 1.35;
+    letter-spacing: 0.012em;
+    line-height: 1.4;
   }
 
   .horizontal-detail__finish-note {
@@ -909,7 +920,7 @@
     color: rgba(255, 255, 255, 0.9);
     font-size: 0.78rem;
     font-weight: 600;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.055em;
     line-height: 1.2;
     text-align: left;
     text-transform: uppercase;
@@ -925,6 +936,127 @@
       margin-top: 0.28rem;
       border-bottom: 1px solid currentColor;
     }
+  }
+
+  .horizontal-detail--powder-font-test,
+  .horizontal-detail--liquid-font-test,
+  .horizontal-detail--treatments-font-test {
+    .horizontal-detail__back,
+    h2,
+    .horizontal-detail__summary,
+    h3,
+    .horizontal-detail__description,
+    .horizontal-detail__finish-note {
+      font-family: 'Montserrat', sans-serif;
+    }
+  }
+
+  .horizontal-detail--powder-font-test {
+    .horizontal-detail__back,
+    h2,
+    .horizontal-detail__summary,
+    h3,
+    .horizontal-detail__description,
+    .horizontal-detail__finish-note {
+      font-family: 'Source Sans 3', sans-serif;
+    }
+
+    h2,
+    h3,
+    .horizontal-detail__description {
+      letter-spacing: normal;
+    }
+
+    h2 {
+      font-size: clamp(44.1px, 3.57vw, 71.4px);
+    }
+
+    h3 {
+      font-size: clamp(25.2px, 2.1vw, 39.9px);
+    }
+
+    .horizontal-detail__description {
+      font-size: clamp(14.7px, 1.05vw, 18.9px);
+    }
+
+    .horizontal-detail__summary {
+      font-size: clamp(13.65px, 1.05vw, 17.85px);
+      letter-spacing: 0.03em;
+    }
+
+    .horizontal-detail__finish-note {
+      font-size: 0.819rem;
+      letter-spacing: 0.04em;
+    }
+  }
+
+  .horizontal-detail--liquid-font-test {
+    .horizontal-detail__back,
+    h2,
+    .horizontal-detail__summary,
+    h3,
+    .horizontal-detail__description,
+    .horizontal-detail__finish-note {
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    h2,
+    h3,
+    .horizontal-detail__description {
+      letter-spacing: normal;
+    }
+
+    h2 {
+      font-size: clamp(43.26px, 3.502vw, 70.04px);
+    }
+
+    h3 {
+      font-size: clamp(24.72px, 2.06vw, 39.14px);
+    }
+
+    .horizontal-detail__description {
+      font-size: clamp(14.42px, 1.03vw, 18.54px);
+    }
+
+    .horizontal-detail__summary {
+      font-size: clamp(13.39px, 1.03vw, 17.51px);
+      letter-spacing: 0.03em;
+    }
+
+    .horizontal-detail__finish-note {
+      font-size: 0.803rem;
+      letter-spacing: 0.04em;
+    }
+  }
+
+  .horizontal-detail--treatments-font-test {
+    h2 {
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      letter-spacing: -0.01em;
+      line-height: 1.06;
+    }
+
+    .horizontal-detail__description {
+      letter-spacing: 0.012em;
+      line-height: 1.4;
+    }
+
+    .horizontal-detail__summary {
+      letter-spacing: 0.05em;
+      line-height: 1.3;
+    }
+
+    .horizontal-detail__finish-note {
+      letter-spacing: 0.055em;
+    }
+  }
+
+  .horizontal-detail--treatments-font-test:has(.service-finishes-panel--special) h2 {
+    max-width: 100%;
+    white-space: normal;
   }
 
   .horizontal-detail__content .service-finishes-panel {
@@ -1013,6 +1145,41 @@
       inset -12px -18px 26px rgba(0, 0, 0, 0.24);
   }
 
+  .horizontal-detail__content .service-finishes-panel__grid--special {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .horizontal-detail__content .service-finishes-panel__sample--special {
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.16), transparent 38%),
+      rgba(36, 43, 110, 0.72);
+    box-shadow:
+      0 10px 18px rgba(0, 0, 0, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+
+  .horizontal-detail__content .service-finishes-panel__icon {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    aspect-ratio: 1;
+    color: rgba(246, 248, 255, 0.94);
+
+    svg {
+      display: block;
+      width: 28px;
+      height: 28px;
+      stroke: currentColor;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+
   .horizontal-detail__content .service-finishes-panel__sample::after {
     content: '';
     position: absolute;
@@ -1024,6 +1191,10 @@
       radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0.16) 18%, transparent 36%),
       radial-gradient(circle at 72% 78%, rgba(0, 0, 0, 0.22), transparent 46%);
     mix-blend-mode: soft-light;
+  }
+
+  .horizontal-detail__content .service-finishes-panel__sample--special::after {
+    content: none;
   }
 
   .horizontal-detail__content .service-finishes-panel__sample img {
@@ -1127,7 +1298,8 @@
       min-height: min(52vh, 520px);
       padding: clamp(2.2rem, 2.6vw, 3.2rem) clamp(2rem, 2.8vw, 3.2rem);
       border: 1px solid rgba(110, 125, 255, 0.22);
-      background: rgba(36, 43, 110, 0.78);
+      border-radius: 6px;
+      background: rgba(36, 43, 110, 0.92);
       color: #FFFFFF;
       box-shadow:
         0 18px 45px rgba(0, 0, 0, 0.16),
@@ -1159,18 +1331,45 @@
       }
 
       .contact-overlay__map {
-        min-height: 100%;
-        margin-top: 0;
-        margin-left: 1.6rem;
+        width: 100%;
+        max-width: 26rem;
+        aspect-ratio: 1624 / 968;
+        min-height: 0;
+        margin-top: 1rem;
+        margin-left: 0;
+        overflow: hidden;
+        border-radius: 6px;
         background: rgba(0, 0, 0, 0.18);
 
         iframe {
+          display: block;
+          width: 100%;
           height: 100%;
-          min-height: 22rem;
+          min-height: 0;
         }
 
         &--blocked {
           border-color: rgba(255, 255, 255, 0.24);
+        }
+      }
+
+      .contact-overlay__image {
+        width: 100%;
+        max-width: none;
+        min-height: 100%;
+        margin-top: 0;
+        margin-left: 1.6rem;
+        overflow: hidden;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.18);
+
+        img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          min-height: 22rem;
+          object-fit: cover;
+          object-position: center center;
         }
       }
 

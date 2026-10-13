@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import '../styles/components/ServiceDetailOverlay.scss';
-import FinishesModal, { ServiceFinishesPanel } from './FinishesModal';
+import FinishesModal, { ServiceFinishesPanel, SpecialCoatingsModal, SpecialCoatingsPanel } from './FinishesModal';
 
 function ServiceDetailOverlay({ service, images, lockScroll = true, onClose, onCloseAll, backLabel = '← SERVICIOS', copy }) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -9,6 +9,7 @@ function ServiceDetailOverlay({ service, images, lockScroll = true, onClose, onC
   const [manualChangeCount, setManualChangeCount] = useState(0);
   const [isFinishesVisible, setIsFinishesVisible] = useState(false);
   const [activeFinishesId, setActiveFinishesId] = useState(null);
+  const [isSpecialCoatingsOpen, setIsSpecialCoatingsOpen] = useState(false);
   const [isDesktopViewport, setIsDesktopViewport] = useState(() => (
     typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches
   ));
@@ -16,7 +17,7 @@ function ServiceDetailOverlay({ service, images, lockScroll = true, onClose, onC
   const scrollPositionRef = useRef(0);
   const isOpen = Boolean(service);
   const closeAll = onCloseAll ?? onClose;
-  const isShowingInlineFinishes = isDesktopViewport && Boolean(activeFinishesId);
+  const isShowingInlineFinishes = isDesktopViewport && (Boolean(activeFinishesId) || isSpecialCoatingsOpen);
   const prefersReducedMotion = typeof window !== 'undefined'
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const powderImageSrc = `${import.meta.env.BASE_URL}image/polvo/Polvo1.webp`;
@@ -222,6 +223,7 @@ function ServiceDetailOverlay({ service, images, lockScroll = true, onClose, onC
     setIsCarouselPaused(false);
     setIsFinishesVisible(false);
     setActiveFinishesId(null);
+    setIsSpecialCoatingsOpen(false);
   }, [service]);
 
   useEffect(() => {
@@ -416,10 +418,14 @@ function ServiceDetailOverlay({ service, images, lockScroll = true, onClose, onC
               </section>
 
               <aside className="service-detail-overlay__content">
-                {isShowingInlineFinishes ? (
+                {isDesktopViewport && activeFinishesId ? (
                   <ServiceFinishesPanel
                     serviceId={activeFinishesId}
                     onBack={() => setActiveFinishesId(null)}
+                  />
+                ) : isDesktopViewport && isSpecialCoatingsOpen ? (
+                  <SpecialCoatingsPanel
+                    onBack={() => setIsSpecialCoatingsOpen(false)}
                   />
                 ) : (
                   <>
@@ -447,6 +453,15 @@ function ServiceDetailOverlay({ service, images, lockScroll = true, onClose, onC
                         VERSATILIDAD EN COLORES Y ACABADOS
                       </button>
                     )}
+                    {service?.id === 'technical' && (
+                      <button
+                        type="button"
+                        className="service-detail-overlay__finish-note is-visible"
+                        onClick={() => setIsSpecialCoatingsOpen(true)}
+                      >
+                        VER RECUBRIMIENTOS ESPECIALES
+                      </button>
+                    )}
                   </>
                 )}
               </aside>
@@ -455,10 +470,17 @@ function ServiceDetailOverlay({ service, images, lockScroll = true, onClose, onC
           </motion.div>
 
           {!isDesktopViewport && (
-            <FinishesModal
-              serviceId={activeFinishesId}
-              onClose={() => setActiveFinishesId(null)}
-            />
+            <>
+              <FinishesModal
+                serviceId={activeFinishesId}
+                onClose={() => setActiveFinishesId(null)}
+              />
+              {isSpecialCoatingsOpen && (
+                <SpecialCoatingsModal
+                  onClose={() => setIsSpecialCoatingsOpen(false)}
+                />
+              )}
+            </>
           )}
         </motion.div>
       )}

@@ -130,6 +130,41 @@
     filter: drop-shadow(0 5px 6px rgba(0, 0, 0, 0.22));
   }
 
+  &__sample--special {
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.16), transparent 38%),
+      rgba(36, 43, 110, 0.72);
+    box-shadow:
+      0 10px 18px rgba(0, 0, 0, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+
+  &__sample--special::after {
+    content: none;
+  }
+
+  &__icon {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    aspect-ratio: 1;
+    color: rgba(246, 248, 255, 0.94);
+
+    svg {
+      display: block;
+      width: 28px;
+      height: 28px;
+      stroke: currentColor;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+
   &__image--satinado,
   &__image--brillante {
     transform: scale(1.48);
@@ -198,6 +233,10 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1.55rem 1.2rem;
       padding: 1.9rem 0 1.6rem;
+    }
+
+    &__options--special {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
     }
 
     &__sample {
