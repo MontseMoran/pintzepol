@@ -89,9 +89,9 @@
     position: relative;
     flex: 1;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     min-height: 0;
-    padding: 6rem 1rem 1rem;
+    padding: 1rem;
   }
 
   &__panel {
@@ -227,7 +227,7 @@
 
     &__stage {
       min-height: auto;
-      padding-top: 5.8rem;
+      padding-top: 1rem;
     }
 
     &__panel {
@@ -403,6 +403,13 @@
       width: 2.75rem;
       height: 2.75rem;
       font-size: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1920px) {
+    &__panel {
+      transform: scale(1.4);
+      transform-origin: right center;
     }
   }
 

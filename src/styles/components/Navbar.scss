@@ -3,9 +3,11 @@
   top: 0.7rem;
   left: 0.7rem;
     z-index: 40;
+  pointer-events: none;
 
   &__toggle {
     position: relative;
+    pointer-events: auto;
     width: 2rem;
     height: 2rem;
     display: inline-flex;
@@ -38,6 +40,7 @@
   }
 
   &__panel {
+    pointer-events: none;
     width: min(12.5rem, calc(100vw - 2rem));
     margin-top: 0.5rem;
     padding: 0.85rem 1rem;
@@ -90,6 +93,7 @@
     }
 
     .floating-nav__panel {
+      pointer-events: auto;
       opacity: 1;
       visibility: visible;
       transform: translateY(0) scale(1);

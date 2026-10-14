@@ -231,10 +231,24 @@ function App() {
     <>
       <div className="home-shell">
         <div className="horizontal-background" aria-hidden="true">
-          <Header
-            videoRef={heroVideoRef}
-            showContent={false}
-          />
+          {isDesktopHorizontal ? (
+            <Header
+              videoRef={heroVideoRef}
+              showContent={false}
+            />
+          ) : (
+            <video
+              ref={heroVideoRef}
+              className="horizontal-background__video"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+            >
+              <source src="image/video3.mp4" type="video/mp4" />
+            </video>
+          )}
         </div>
         {isDesktopHorizontal && (
           <div className="horizontal-brand" aria-label="Logo Pintzepol">
