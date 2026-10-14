@@ -14,8 +14,12 @@ function Footer({ onOpenLegal }) {
         rel="noopener noreferrer"
         aria-label="Desarrollo web por Montse Morán"
       >
-        <span>Desarrollo web · Montse Morán</span>
-        <img className="site-footer__signature-mark" src="image/favicon-32x32.png" alt="" aria-hidden="true" />
+        <span className="site-footer__signature-label">Desarrollo web</span>
+        <span className="site-footer__signature-credit">
+          <span className="site-footer__signature-separator" aria-hidden="true">·</span>
+          <span>Montse Morán</span>
+          <img className="site-footer__signature-mark" src="image/favicon-32x32.png" alt="" aria-hidden="true" />
+        </span>
       </a>
       <nav aria-label="Enlaces legales">
         {legalNav.map((item, index) => (

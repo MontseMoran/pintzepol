@@ -157,6 +157,17 @@
   }
 }
 
+@media (max-width: 1023px) {
+  .contact-overlay__panel--inline .contact-overlay__map-actions {
+    button,
+    a {
+      min-height: 2.75rem;
+      padding: 0.65rem 0.9rem;
+      font-size: 0.82rem;
+    }
+  }
+}
+
 @media (min-width: 1024px) {
   .contact-overlay__panel--inline {
     width: min(100%, 42rem);

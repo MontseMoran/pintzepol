@@ -9,6 +9,7 @@ import '../styles/components/HorizontalHome.scss';
 
 const cardViewport = { once: true, amount: 0.32 };
 const processTimelineViewport = { once: false, amount: 0.82 };
+const mobileProcessTimelineViewport = { once: true, amount: 0.2 };
 const processStepDelays = [0.05, 0.32, 0.6, 0.88, 1.04, 1.43, 1.78];
 const processEase = [0.22, 1, 0.36, 1];
 const processMarkerInitial = {
@@ -527,7 +528,24 @@ function ProcessTimelineStep({ item, index, isActive }) {
 function ProcessGridPanel({ title, items }) {
   const reveal = useCardReveal();
   const processCardRef = useRef(null);
-  const isProcessTimelineReady = useInView(processCardRef, processTimelineViewport);
+  const [isMobileProcessLayout, setIsMobileProcessLayout] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 599px)').matches
+  );
+
+  useEffect(() => {
+    const mobileQuery = window.matchMedia('(max-width: 599px)');
+    const updateProcessLayout = () => setIsMobileProcessLayout(mobileQuery.matches);
+
+    updateProcessLayout();
+    mobileQuery.addEventListener('change', updateProcessLayout);
+
+    return () => mobileQuery.removeEventListener('change', updateProcessLayout);
+  }, []);
+
+  const isProcessTimelineReady = useInView(
+    processCardRef,
+    isMobileProcessLayout ? mobileProcessTimelineViewport : processTimelineViewport
+  );
   const processImage = `${import.meta.env.BASE_URL}image/procesos/Industrial Worker Coating Suspended Machinery.webp`;
   const firstRowItems = items.slice(0, 4);
   const secondRowItems = items.slice(4);

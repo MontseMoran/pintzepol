@@ -100,6 +100,18 @@
     }
   }
 
+  @media (max-width: 599px) {
+    &__toggle {
+      width: 2.3rem;
+      height: 2.3rem;
+      gap: 0.32rem;
+
+      span {
+        width: 0.875rem;
+      }
+    }
+  }
+
   @media (min-width: 600px) {
     top: 1.4rem;
     left: 1.4rem;
@@ -110,6 +122,17 @@
 
       span {
         width: 1rem;
+      }
+    }
+  }
+
+  @media (min-width: 600px) and (max-width: 1023px) {
+    &__toggle {
+      width: 3.3rem;
+      height: 3.3rem;
+
+      span {
+        width: 1.1rem;
       }
     }
   }

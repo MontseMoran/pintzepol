@@ -251,6 +251,35 @@
     }
   }
 
+  @media (max-width: 599px) {
+    &__panel {
+      min-height: clamp(18rem, 42vh, 22rem);
+      padding: 1.5rem 1.25rem 4.4rem;
+    }
+
+    &__copy {
+      margin-top: 1.15rem;
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    &__cta {
+      min-height: 3rem;
+      margin-top: 1.4rem;
+      padding: 0.85rem 1.2rem;
+      font-size: 0.8rem;
+    }
+
+    &__scroll {
+      left: 1.25rem;
+      bottom: 1.1rem;
+      width: 3rem;
+      height: 3rem;
+      border-width: 2px;
+      font-size: 1.35rem;
+    }
+  }
+
   @include respond-to(tablet) {
     --hero-top-offset: 0.35rem;
 
@@ -305,6 +334,23 @@
       height: 2.4rem;
       border-width: 2px;
       font-size: 1.25rem;
+    }
+  }
+
+  @media (min-width: 600px) and (max-width: 1023px) {
+    &__stage {
+      padding: 1.2rem;
+    }
+
+    &__cta {
+      min-height: 3.125rem;
+      font-size: 1rem;
+    }
+
+    &__scroll {
+      width: 3rem;
+      height: 3rem;
+      font-size: 1.4rem;
     }
   }
 

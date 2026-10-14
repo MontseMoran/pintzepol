@@ -1,5 +1,6 @@
 import React from 'react';
 import PaintLogo from './PaintLogo';
+import { company } from '../content/company';
 import '../styles/components/Header.scss';
 
 function Header({
@@ -8,6 +9,7 @@ function Header({
   showContent = true,
   onOpenServices,
   onOpenContact,
+  useEmailCta = false,
 }) {
   return (
     <header id={showContent ? 'inicio' : undefined} className={`hero${!showContent ? ' hero--background' : ''}`}>
@@ -45,9 +47,15 @@ function Header({
                 Más de 40 años de experiencia aplicando pintura líquida y pintura en polvo
                 para obtener acabados resistentes, uniformes y duraderos.
               </p>
-              <button type="button" className="hero__cta" onClick={onOpenContact}>
-                Solicita presupuesto
-              </button>
+              {useEmailCta ? (
+                <a className="hero__cta" href={`mailto:${company.email}`}>
+                  Solicita presupuesto
+                </a>
+              ) : (
+                <button type="button" className="hero__cta" onClick={onOpenContact}>
+                  Solicita presupuesto
+                </button>
+              )}
 
               <button
                 type="button"

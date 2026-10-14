@@ -197,8 +197,6 @@ function App() {
   }, [isDesktopHorizontal, legalDocumentId]);
 
   useMotionValueEvent(scrollYProgress, 'change', (latestProgress) => {
-    const video = heroVideoRef.current;
-
     if (!isDesktopHorizontal) {
       return;
     }
@@ -211,20 +209,6 @@ function App() {
     setActivePanelIndex((currentPanelIndex) => (
       currentPanelIndex === nextPanelIndex ? currentPanelIndex : nextPanelIndex
     ));
-
-    if (!video) {
-      return;
-    }
-
-    const isHeroActive = latestProgress < 0.04;
-
-    if (isHeroActive && video.paused) {
-      video.play().catch(() => {});
-    }
-
-    if (!isHeroActive && !video.paused) {
-      video.pause();
-    }
   });
 
   return (
@@ -250,12 +234,10 @@ function App() {
             </video>
           )}
         </div>
-        {isDesktopHorizontal && (
-          <div className="horizontal-brand" aria-label="Logo Pintzepol">
-            <img src="image/logo.svg" alt="Logo Pintzepol" className="hero__logo hero__logo--static" />
-            <PaintLogo videoRef={heroVideoRef} />
-          </div>
-        )}
+        <div className="horizontal-brand" aria-label="Logo Pintzepol">
+          <img src="image/logo.svg" alt="Logo Pintzepol" className="hero__logo hero__logo--static" />
+          {isDesktopHorizontal && <PaintLogo videoRef={heroVideoRef} />}
+        </div>
         {isDesktopHorizontal && (
           <aside className="horizontal-progress" aria-label="Progreso del recorrido">
             <p className="horizontal-progress__count">
@@ -281,6 +263,7 @@ function App() {
                   showBackground={false}
                   onOpenServices={openServices}
                   onOpenContact={openContact}
+                  useEmailCta={!isDesktopHorizontal}
                 />
               </section>
               <HorizontalHome
