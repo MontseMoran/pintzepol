@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useInView, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion, useInView, useReducedMotion } from 'framer-motion';
 import { services, showcaseImages } from './Services';
 import { processSteps, sectors } from '../content/company';
 import Contact from './Contact';
@@ -105,7 +105,7 @@ function CoverflowFrame({
 
 const IMAGE_AUTOPLAY_MS = 3200;
 
-function useImageCarousel(length) {
+function useImageCarousel(length, isExternallyPaused = false) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [manualChangeCount, setManualChangeCount] = useState(0);
@@ -117,7 +117,7 @@ function useImageCarousel(length) {
   }, [activeImageIndex, length]);
 
   useEffect(() => {
-    if (length <= 1 || isPaused) {
+    if (length <= 1 || isPaused || isExternallyPaused) {
       return undefined;
     }
 
@@ -136,7 +136,7 @@ function useImageCarousel(length) {
     return () => {
       window.clearInterval(autoplayTimer);
     };
-  }, [isPaused, length, manualChangeCount]);
+  }, [isExternallyPaused, isPaused, length, manualChangeCount]);
 
   const showPreviousImage = () => {
     if (length <= 1) {
@@ -329,6 +329,9 @@ function ServicePanel({ service, onBackToServices }) {
   const reveal = useCardReveal();
   const [activeFinishesId, setActiveFinishesId] = useState(null);
   const [isSpecialCoatingsOpen, setIsSpecialCoatingsOpen] = useState(false);
+  const [isCompactServiceLayout, setIsCompactServiceLayout] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 1023px)').matches
+  );
   const detailClassByServiceId = {
     powder: 'horizontal-detail--powder',
     liquid: 'horizontal-detail--liquid',
@@ -342,13 +345,24 @@ function ServicePanel({ service, onBackToServices }) {
     summary: service.summary,
   };
   const images = serviceImages[service.id] ?? showcaseImages;
+  const isSubpanelOpen = Boolean(activeFinishesId || isSpecialCoatingsOpen);
   const {
     activeImageIndex,
     pauseCarousel,
     resumeCarousel,
     showPreviousImage,
     showNextImage,
-  } = useImageCarousel(images.length);
+  } = useImageCarousel(images.length, isCompactServiceLayout && isSubpanelOpen);
+
+  useEffect(() => {
+    const compactQuery = window.matchMedia('(max-width: 1023px)');
+    const updateServiceLayout = () => setIsCompactServiceLayout(compactQuery.matches);
+
+    updateServiceLayout();
+    compactQuery.addEventListener('change', updateServiceLayout);
+
+    return () => compactQuery.removeEventListener('change', updateServiceLayout);
+  }, []);
 
   useEffect(() => {
     setActiveFinishesId(null);
@@ -357,7 +371,7 @@ function ServicePanel({ service, onBackToServices }) {
 
   return (
     <motion.div
-      className={`horizontal-detail${detailClass ? ` ${detailClass}` : ''}`}
+      className={`horizontal-detail${detailClass ? ` ${detailClass}` : ''}${isSubpanelOpen ? ' is-subpanel-open' : ''}`}
       initial="hidden"
       whileInView="visible"
       viewport={cardViewport}
@@ -391,39 +405,66 @@ function ServicePanel({ service, onBackToServices }) {
       </section>
 
       <aside className="horizontal-detail__content">
-        {activeFinishesId ? (
-          <ServiceFinishesPanel
-            serviceId={activeFinishesId}
-            onBack={() => setActiveFinishesId(null)}
-          />
-        ) : isSpecialCoatingsOpen ? (
-          <SpecialCoatingsPanel
-            onBack={() => setIsSpecialCoatingsOpen(false)}
-          />
-        ) : (
-          <>
-            <h3>{copy.technicalTitle}</h3>
-            <p className="horizontal-detail__description">{copy.description}</p>
-            {(service.id === 'powder' || service.id === 'liquid') && (
-              <button
-                type="button"
-                className="horizontal-detail__finish-note"
-                onClick={() => setActiveFinishesId(service.id)}
-              >
-                VERSATILIDAD EN COLORES Y ACABADOS
-              </button>
-            )}
-            {service.id === 'technical' && (
-              <button
-                type="button"
-                className="horizontal-detail__finish-note"
-                onClick={() => setIsSpecialCoatingsOpen(true)}
-              >
-                VER RECUBRIMIENTOS ESPECIALES
-              </button>
-            )}
-          </>
-        )}
+        <AnimatePresence mode="wait" initial={false}>
+          {activeFinishesId ? (
+            <motion.div
+              key="finishes"
+              className="horizontal-detail__content-view horizontal-detail__content-view--panel"
+              initial={isCompactServiceLayout ? { opacity: 0, y: 48 } : false}
+              animate={isCompactServiceLayout ? { opacity: 1, y: 0 } : undefined}
+              exit={isCompactServiceLayout ? { opacity: 0, y: 48 } : undefined}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ServiceFinishesPanel
+                serviceId={activeFinishesId}
+                onBack={() => setActiveFinishesId(null)}
+              />
+            </motion.div>
+          ) : isSpecialCoatingsOpen ? (
+            <motion.div
+              key="special-coatings"
+              className="horizontal-detail__content-view horizontal-detail__content-view--panel"
+              initial={isCompactServiceLayout ? { opacity: 0, y: 48 } : false}
+              animate={isCompactServiceLayout ? { opacity: 1, y: 0 } : undefined}
+              exit={isCompactServiceLayout ? { opacity: 0, y: 48 } : undefined}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <SpecialCoatingsPanel
+                onBack={() => setIsSpecialCoatingsOpen(false)}
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="technical-content"
+              className="horizontal-detail__content-view"
+              initial={isCompactServiceLayout ? { opacity: 0, y: 24 } : false}
+              animate={isCompactServiceLayout ? { opacity: 1, y: 0 } : undefined}
+              exit={isCompactServiceLayout ? { opacity: 0, y: 24 } : undefined}
+              transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <h3>{copy.technicalTitle}</h3>
+              <p className="horizontal-detail__description">{copy.description}</p>
+              {(service.id === 'powder' || service.id === 'liquid') && (
+                <button
+                  type="button"
+                  className="horizontal-detail__finish-note"
+                  onClick={() => setActiveFinishesId(service.id)}
+                >
+                  VERSATILIDAD EN COLORES Y ACABADOS
+                </button>
+              )}
+              {service.id === 'technical' && (
+                <button
+                  type="button"
+                  className="horizontal-detail__finish-note"
+                  onClick={() => setIsSpecialCoatingsOpen(true)}
+                >
+                  VER RECUBRIMIENTOS ESPECIALES
+                </button>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </aside>
     </motion.div>
   );

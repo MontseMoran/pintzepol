@@ -141,7 +141,6 @@ export function SpecialCoatingsPanel({ onBack }) {
         <h3 id="special-coatings-panel-title" className="service-finishes-panel__title">
           RECUBRIMIENTOS ESPECIALES
         </h3>
-        <p className="service-finishes-panel__subtitle">TRATAMIENTOS TÉCNICOS</p>
       </header>
 
       <div className="service-finishes-panel__grid service-finishes-panel__grid--special">
@@ -195,7 +194,6 @@ export function SpecialCoatingsModal({ onClose }) {
               <h2 id="special-coatings-modal-title" className="finishes-modal__title">
                 RECUBRIMIENTOS ESPECIALES
               </h2>
-              <p className="finishes-modal__subtitle">TRATAMIENTOS TÉCNICOS</p>
             </div>
             <button
               ref={closeButtonRef}
@@ -298,7 +296,6 @@ export function FinishesPanel({ serviceId, onBack, closeButtonRef, closeLabel = 
 
 export function ServiceFinishesPanel({ serviceId, onBack }) {
   const finishGroup = serviceId ? finishGroups[serviceId] : null;
-  const subtitle = finishGroup?.title?.replace(/^ACABADOS\s*/, '') ?? '';
 
   if (!finishGroup) {
     return null;
@@ -318,7 +315,6 @@ export function ServiceFinishesPanel({ serviceId, onBack }) {
         <h3 id="service-finishes-panel-title" className="service-finishes-panel__title">
           ACABADOS
         </h3>
-        <p className="service-finishes-panel__subtitle">{subtitle}</p>
       </header>
 
       <div className="service-finishes-panel__grid">

@@ -235,8 +235,11 @@ function App() {
           )}
         </div>
         <div className="horizontal-brand" aria-label="Logo Pintzepol">
-          <img src="image/logo.svg" alt="Logo Pintzepol" className="hero__logo hero__logo--static" />
+          <img src="image/logo-efect/logo-filled.svg" alt="Logo Pintzepol" className="hero__logo hero__logo--static" />
           {isDesktopHorizontal && <PaintLogo videoRef={heroVideoRef} />}
+        </div>
+        <div className="horizontal-brand__outline-layer" aria-hidden="true">
+          <img src="image/logo-efect/logo-outline.svg" alt="" />
         </div>
         {isDesktopHorizontal && (
           <aside className="horizontal-progress" aria-label="Progreso del recorrido">

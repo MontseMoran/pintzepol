@@ -78,6 +78,13 @@ function Contact({
         <figure className="contact-overlay__image" aria-hidden="true">
           <img src={`${import.meta.env.BASE_URL}image/contacto.webp`} alt="" />
         </figure>
+        <nav className="contact-overlay__quick-actions" aria-label="Acciones rápidas de contacto">
+          <a href={`tel:${company.phoneTel}`}>Llamar</a>
+          <a href={`mailto:${company.email}`}>Email</a>
+          <a href={company.mapsExternalUrl} target="_blank" rel="noopener noreferrer">
+            Cómo llegar
+          </a>
+        </nav>
       </section>
     );
   }
