@@ -18,13 +18,16 @@ function FadeCarouselImage({ image, className }) {
         src={image.src}
         alt={image.alt}
         className={className}
-        initial={{ opacity: 0, scale: 1.006 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 1 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         transition={fadeTransition}
         style={{
           position: 'absolute',
-          inset: 0,
+          top: '-1px',
+          left: 0,
+          width: '100%',
+          height: 'calc(100% + 1px)',
         }}
       />
     </AnimatePresence>

@@ -3,26 +3,15 @@ import { motion, useMotionValueEvent, useScroll, useTransform } from 'framer-mot
 import Header from './components/Header';
 import PaintLogo from './components/PaintLogo';
 import Navigation from './components/Navigation';
-import { services, showcaseImages } from './components/Services';
-import { processSteps, readCookieConsent, saveCookieConsent, sectors } from './content/company';
-import ServicesOverlay from './components/ServicesOverlay';
-import ServiceDetailOverlay from './components/ServiceDetailOverlay';
-import Contact from './components/Contact';
+import { readCookieConsent, saveCookieConsent } from './content/company';
 import Footer from './components/Footer';
-import HorizontalHome, { sectorDetailCopy } from './components/HorizontalHome';
+import HorizontalHome from './components/HorizontalHome';
 import LegalOverlay from './components/LegalOverlay';
 import CookieBanner from './components/CookieBanner';
-import JourneyOverlay from './components/JourneyOverlay';
 
 function App() {
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
-  const [isContactOpen, setIsContactOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState(null);
   const [isDesktopHorizontal, setIsDesktopHorizontal] = useState(false);
   const [activePanelIndex, setActivePanelIndex] = useState(0);
-  const [isSectoresOpen, setIsSectoresOpen] = useState(false);
-  const [isProcesosOpen, setIsProcesosOpen] = useState(false);
-  const [selectedSector, setSelectedSector] = useState(null);
   const [legalDocumentId, setLegalDocumentId] = useState(null);
   const [cookieConsent, setCookieConsent] = useState(null);
   const horizontalStoryRef = useRef(null);
@@ -64,7 +53,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!isServicesOpen && !isContactOpen && !isSectoresOpen && !isProcesosOpen && !legalDocumentId && !selectedSector) {
+    if (!legalDocumentId) {
       return undefined;
     }
 
@@ -95,7 +84,7 @@ function App() {
       body.style.overflow = originalBodyStyles.overflow;
       window.scrollTo(0, scrollPositionRef.current);
     };
-  }, [isServicesOpen, isContactOpen, isSectoresOpen, isProcesosOpen, legalDocumentId, selectedSector]);
+  }, [legalDocumentId]);
 
   useEffect(() => {
     setCookieConsent(readCookieConsent());
@@ -106,70 +95,40 @@ function App() {
     setCookieConsent(value);
   };
 
-  const openServices = () => {
+  const scrollToSection = (sectionId) => {
     if (isDesktopHorizontal) {
-      scrollToPanel('servicios');
+      scrollToPanel(sectionId);
       return;
     }
 
-    setIsServicesOpen(true);
+    const section = document.getElementById(sectionId);
+
+    if (!section) {
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    section.scrollIntoView({
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      block: 'start',
+    });
+  };
+
+  const openServices = () => {
+    scrollToSection('servicios');
   };
 
   const openSectores = () => {
-    if (isDesktopHorizontal) {
-      scrollToPanel('sectores');
-      return;
-    }
-
-    setIsSectoresOpen(true);
+    scrollToSection('sectores');
   };
 
   const openProcesos = () => {
-    if (isDesktopHorizontal) {
-      scrollToPanel('procesos');
-      return;
-    }
-
-    setIsProcesosOpen(true);
+    scrollToSection('procesos');
   };
 
   const openContact = () => {
-    if (isDesktopHorizontal) {
-      scrollToPanel('contacto');
-      return;
-    }
-
-    setIsContactOpen(true);
-  };
-
-  const closeContact = () => {
-    setIsContactOpen(false);
-  };
-
-  const closeServices = () => {
-    setSelectedService(null);
-    setIsServicesOpen(false);
-  };
-
-  const openServiceDetail = (service) => {
-    setSelectedService(service);
-  };
-
-  const closeServiceDetail = () => {
-    setSelectedService(null);
-  };
-
-  const closeSectores = () => {
-    setSelectedSector(null);
-    setIsSectoresOpen(false);
-  };
-
-  const openSectorDetail = (item) => {
-    setSelectedSector(item);
-  };
-
-  const closeSectorDetail = () => {
-    setSelectedSector(null);
+    scrollToSection('contacto');
   };
 
   const closeLegal = () => {
@@ -210,7 +169,7 @@ function App() {
       return;
     }
 
-    if (legalDocumentId || isContactOpen || isServicesOpen || isSectoresOpen || isProcesosOpen || selectedSector) {
+    if (legalDocumentId) {
       return;
     }
 
@@ -235,7 +194,7 @@ function App() {
     return () => {
       window.removeEventListener('keydown', handleHorizontalKeyDown);
     };
-  }, [isDesktopHorizontal, isContactOpen, isServicesOpen, isSectoresOpen, isProcesosOpen, legalDocumentId, selectedSector]);
+  }, [isDesktopHorizontal, legalDocumentId]);
 
   useMotionValueEvent(scrollYProgress, 'change', (latestProgress) => {
     const video = heroVideoRef.current;
@@ -271,14 +230,12 @@ function App() {
   return (
     <>
       <div className="home-shell">
-        {isDesktopHorizontal && (
-          <div className="horizontal-background" aria-hidden="true">
-            <Header
-              videoRef={heroVideoRef}
-              showContent={false}
-            />
-          </div>
-        )}
+        <div className="horizontal-background" aria-hidden="true">
+          <Header
+            videoRef={heroVideoRef}
+            showContent={false}
+          />
+        </div>
         {isDesktopHorizontal && (
           <div className="horizontal-brand" aria-label="Logo Pintzepol">
             <img src="image/logo.svg" alt="Logo Pintzepol" className="hero__logo hero__logo--static" />
@@ -307,7 +264,7 @@ function App() {
               <section className="horizontal-panel horizontal-panel--hero" data-panel-id="inicio">
                 <Header
                   videoRef={heroVideoRef}
-                  showBackground={!isDesktopHorizontal}
+                  showBackground={false}
                   onOpenServices={openServices}
                   onOpenContact={openContact}
                 />
@@ -327,13 +284,7 @@ function App() {
         onOpenServices={openServices}
         onOpenSectores={openSectores}
         onOpenProcesos={openProcesos}
-        onNavigate={isDesktopHorizontal ? scrollToPanel : undefined}
-      />
-      <Contact
-        isOpen={isContactOpen}
-        onClose={closeContact}
-        mapsConsent={cookieConsent === 'maps'}
-        onAcceptMaps={() => updateCookieConsent('maps')}
+        onNavigate={isDesktopHorizontal ? scrollToPanel : scrollToSection}
       />
       <LegalOverlay
         documentId={legalDocumentId}
@@ -345,46 +296,6 @@ function App() {
         onOpenCookies={() => openLegal('cookies')}
         onAcceptNecessary={() => updateCookieConsent('necessary')}
         onAcceptMaps={() => updateCookieConsent('maps')}
-      />
-      <JourneyOverlay
-        isOpen={isSectoresOpen}
-        title="SECTORES"
-        items={sectors}
-        images={showcaseImages}
-        onClose={closeSectores}
-        onSelectItem={openSectorDetail}
-      />
-      <JourneyOverlay
-        isOpen={isProcesosOpen}
-        title="PROCESOS"
-        items={processSteps}
-        images={showcaseImages}
-        layout="process"
-        onClose={() => setIsProcesosOpen(false)}
-      />
-      <ServicesOverlay
-        isOpen={isServicesOpen}
-        isDetailOpen={Boolean(selectedService)}
-        services={services}
-        images={showcaseImages}
-        onClose={closeServices}
-        onSelectService={openServiceDetail}
-      />
-      <ServiceDetailOverlay
-        service={selectedService}
-        images={showcaseImages}
-        lockScroll={false}
-        onClose={closeServiceDetail}
-        onCloseAll={closeServices}
-      />
-      <ServiceDetailOverlay
-        service={selectedSector}
-        images={showcaseImages}
-        lockScroll={false}
-        backLabel="← SECTORES"
-        copy={selectedSector ? sectorDetailCopy[selectedSector.id] : null}
-        onClose={closeSectorDetail}
-        onCloseAll={closeSectores}
       />
     </>
   );

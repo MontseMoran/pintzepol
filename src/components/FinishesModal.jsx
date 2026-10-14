@@ -299,6 +299,14 @@ export function FinishesPanel({ serviceId, onBack, closeButtonRef, closeLabel = 
 export function ServiceFinishesPanel({ serviceId, onBack }) {
   const finishGroup = serviceId ? finishGroups[serviceId] : null;
   const subtitle = finishGroup?.title?.replace(/^ACABADOS\s*/, '') ?? '';
+  const handleBackPointerUp = (event) => {
+    if (event.pointerType === 'mouse') {
+      return;
+    }
+
+    event.preventDefault();
+    onBack();
+  };
 
   if (!finishGroup) {
     return null;
@@ -310,6 +318,7 @@ export function ServiceFinishesPanel({ serviceId, onBack }) {
         type="button"
         className="service-finishes-panel__back"
         onClick={onBack}
+        onPointerUp={handleBackPointerUp}
       >
         ← VOLVER
       </button>

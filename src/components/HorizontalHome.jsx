@@ -328,12 +328,12 @@ function ServicePanel({ service, onBackToServices }) {
   const reveal = useCardReveal();
   const [activeFinishesId, setActiveFinishesId] = useState(null);
   const [isSpecialCoatingsOpen, setIsSpecialCoatingsOpen] = useState(false);
-  const fontTestClassByServiceId = {
-    powder: 'horizontal-detail--powder-font-test',
-    liquid: 'horizontal-detail--liquid-font-test',
-    technical: 'horizontal-detail--treatments-font-test',
+  const detailClassByServiceId = {
+    powder: 'horizontal-detail--powder',
+    liquid: 'horizontal-detail--liquid',
+    technical: 'horizontal-detail--treatments',
   };
-  const fontTestClass = fontTestClassByServiceId[service.id] ?? '';
+  const detailClass = detailClassByServiceId[service.id] ?? '';
   const copy = detailCopy[service.id] ?? {
     title: service.title.toUpperCase(),
     technicalTitle: service.summary,
@@ -356,7 +356,7 @@ function ServicePanel({ service, onBackToServices }) {
 
   return (
     <motion.div
-      className={`horizontal-detail${fontTestClass ? ` ${fontTestClass}` : ''}`}
+      className={`horizontal-detail${detailClass ? ` ${detailClass}` : ''}`}
       initial="hidden"
       whileInView="visible"
       viewport={cardViewport}
