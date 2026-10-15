@@ -171,7 +171,7 @@ function ServicesOverlay({ isOpen, isDetailOpen, services, images, onClose, onSe
                 </div>
 
                 <div className="services-overlay__detail-image">
-                  <img src="image/maquinas.png" alt="Maquinaria y herramientas para tratamientos técnicos" />
+                  <img src="image/maquinas.webp" alt="Maquinaria y herramientas para tratamientos técnicos" />
                 </div>
               </section>
             </div>

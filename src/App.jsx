@@ -228,7 +228,7 @@ function App() {
               loop
               muted
               playsInline
-              preload="auto"
+              preload="metadata"
             >
               <source src="image/video3.mp4" type="video/mp4" />
             </video>
@@ -270,6 +270,7 @@ function App() {
                 />
               </section>
               <HorizontalHome
+                isDesktopHorizontal={isDesktopHorizontal}
                 mapsConsent={cookieConsent === 'maps'}
                 onAcceptMaps={() => updateCookieConsent('maps')}
                 processesProgress={processesProgress}

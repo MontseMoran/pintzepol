@@ -22,7 +22,7 @@ function Header({
             loop
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
             aria-hidden="true"
           >
             <source src="image/video3.mp4" type="video/mp4" />

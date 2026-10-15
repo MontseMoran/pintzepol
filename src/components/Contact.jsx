@@ -76,7 +76,7 @@ function Contact({
           {showMap && <LocationMap mapsConsent={mapsConsent} onAcceptMaps={onAcceptMaps} />}
         </div>
         <figure className="contact-overlay__image" aria-hidden="true">
-          <img src={`${import.meta.env.BASE_URL}image/contacto.webp`} alt="" />
+          <img src={`${import.meta.env.BASE_URL}image/contacto.webp`} alt="" loading="lazy" decoding="async" />
         </figure>
         <nav className="contact-overlay__quick-actions" aria-label="Acciones rápidas de contacto">
           <a href={`tel:${company.phoneTel}`}>Llamar</a>

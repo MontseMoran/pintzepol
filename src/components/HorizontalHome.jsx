@@ -603,6 +603,8 @@ function ProcessGridPanel({ title, items }) {
       <img
         className="horizontal-process__visual"
         src={processImage}
+        loading="lazy"
+        decoding="async"
         alt=""
         aria-hidden="true"
       />
@@ -702,6 +704,7 @@ function ProcessGridPanel({ title, items }) {
 function AccordionIndexPanel({
   title,
   items,
+  isDesktopHorizontal,
   compact = false,
   onSelectItem,
 }) {
@@ -783,14 +786,16 @@ function AccordionIndexPanel({
           })}
         </div>
         <div className="horizontal-services__detail-image">
-          <img src={`${import.meta.env.BASE_URL}image/maquinas.png`} alt="Maquinaria y herramientas para tratamientos técnicos" />
+          {isDesktopHorizontal && (
+            <img src={`${import.meta.env.BASE_URL}image/maquinas.webp`} alt="Maquinaria y herramientas para tratamientos técnicos" />
+          )}
         </div>
       </section>
     </motion.div>
   );
 }
 
-function HorizontalHome({ mapsConsent, onAcceptMaps }) {
+function HorizontalHome({ isDesktopHorizontal, mapsConsent, onAcceptMaps }) {
   const reveal = useCardReveal();
   const [activeServiceDetail, setActiveServiceDetail] = useState(null);
   const [activeSectorDetail, setActiveSectorDetail] = useState(null);
@@ -827,6 +832,7 @@ function HorizontalHome({ mapsConsent, onAcceptMaps }) {
           <AccordionIndexPanel
             title="SECTORES"
             items={sectors}
+            isDesktopHorizontal={isDesktopHorizontal}
             onSelectItem={setActiveSectorDetail}
           />
         )}

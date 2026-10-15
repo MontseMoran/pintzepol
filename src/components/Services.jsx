@@ -7,7 +7,7 @@ import FadeCarouselImage from './FadeCarouselImage';
 export const showcaseImages = [
   {
     id: 'pulido',
-    src: 'image/pulido1.png',
+    src: 'image/pulido1.webp',
     alt: 'Proceso industrial de pulido',
   },
   {
@@ -235,7 +235,7 @@ function Services() {
           >
             <div className={`services-showcase__image services-showcase__image--detail ${activeService.mediaClass}`}>
               <img
-                src="image/maquinas.png"
+                src="image/maquinas.webp"
                 alt="Maquinaria y herramientas para tratamientos técnicos"
                 className="services-showcase__photo"
               />
