@@ -169,6 +169,10 @@
 }
 
 @media (min-width: 1024px) {
+  .contact-overlay__quick-actions {
+    display: none;
+  }
+
   .contact-overlay__panel--inline {
     width: min(100%, 42rem);
     padding: 2rem 1.5rem 1.5rem;

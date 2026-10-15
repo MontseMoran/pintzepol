@@ -2565,6 +2565,33 @@
 
       .contact-overlay__details {
         padding-left: 0;
+
+        > p {
+          display: grid;
+          grid-template-columns: 5rem minmax(0, 1fr);
+          column-gap: 0.5rem;
+        }
+
+        .contact-overlay__hours {
+          display: grid;
+          grid-template-columns: 5rem minmax(0, 1fr);
+          column-gap: 0.5rem;
+          row-gap: 0.25rem;
+          margin-top: 0;
+          padding-top: 0;
+          border-top: 0;
+
+          > strong {
+            grid-column: 1;
+            grid-row: 1 / span 2;
+            margin-bottom: 0;
+          }
+
+          > p {
+            grid-column: 2;
+            margin: 0;
+          }
+        }
       }
 
       .contact-overlay__map {
