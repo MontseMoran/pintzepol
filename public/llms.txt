@@ -1,0 +1,33 @@
+# Pintzepol
+
+PINTZEPOL, S.L.U. es una empresa de recubrimientos industriales ubicada en Rubí, Barcelona.
+
+## Servicios
+
+- Pintura en polvo
+- Pintura líquida
+- Tratamientos técnicos
+- Recubrimientos especiales
+
+## Sectores
+
+- Transporte
+- Industria
+- Salud
+- Tecnología
+
+## Sitio web
+
+- Web principal: https://www.pintzepol.com/
+- Servicios: https://www.pintzepol.com/#servicios
+- Sectores: https://www.pintzepol.com/#sectores
+- Procesos: https://www.pintzepol.com/#procesos
+- Contacto: https://www.pintzepol.com/#contacto
+
+## Contacto
+
+PINTZEPOL, S.L.U.
+Calle Sardana, 7-9, Polígono Industrial Cova Solera
+08191 Rubí, Barcelona
+Email: info@pintzepol.com
+Teléfono: +34 93 699 01 20
