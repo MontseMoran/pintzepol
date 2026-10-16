@@ -266,7 +266,7 @@ function App() {
                   showBackground={false}
                   onOpenServices={openServices}
                   onOpenContact={openContact}
-                  useEmailCta={!isDesktopHorizontal}
+                  useEmailCta
                 />
               </section>
               <HorizontalHome

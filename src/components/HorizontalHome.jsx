@@ -716,7 +716,7 @@ function AccordionIndexPanel({
     resumeCarousel,
     showPreviousImage,
     showNextImage,
-  } = useImageCarousel(showcaseImages.length);
+  } = useImageCarousel(sectorImages.length);
 
   return (
     <motion.div
@@ -728,7 +728,7 @@ function AccordionIndexPanel({
     >
       <section className="horizontal-services__visual">
         <CoverflowFrame
-          images={showcaseImages}
+          images={sectorImages}
           activeImageIndex={activeImageIndex}
           onPrevious={showPreviousImage}
           onNext={showNextImage}
@@ -736,7 +736,7 @@ function AccordionIndexPanel({
           onResume={resumeCarousel}
         />
         <div className="horizontal-services__dots" aria-hidden="true">
-          {showcaseImages.map((image, index) => (
+          {sectorImages.map((image, index) => (
             <span key={image.id} className={`horizontal-services__dot${index === activeImageIndex ? ' is-active' : ''}`} />
           ))}
         </div>
