@@ -10,7 +10,11 @@ import LegalOverlay from './components/LegalOverlay';
 import CookieBanner from './components/CookieBanner';
 
 function App() {
-  const [isDesktopHorizontal, setIsDesktopHorizontal] = useState(false);
+  const [isDesktopHorizontal, setIsDesktopHorizontal] = useState(() =>
+    typeof window !== 'undefined'
+      ? window.matchMedia('(min-width: 1024px)').matches
+      : false
+  );
   const [activePanelIndex, setActivePanelIndex] = useState(0);
   const [legalDocumentId, setLegalDocumentId] = useState(null);
   const [cookieConsent, setCookieConsent] = useState(null);
